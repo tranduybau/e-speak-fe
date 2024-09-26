@@ -1,0 +1,108 @@
+{
+  "env": {
+    "browser": true,
+    "es2021": true,
+    "node": true
+  },
+  "extends": [
+    "airbnb",
+    "airbnb-typescript",
+    "airbnb/hooks",
+    "plugin:react/recommended",
+    "plugin:prettier/recommended",
+    "plugin:@next/next/recommended"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "ecmaVersion": "latest",
+    "sourceType": "module",
+    "project": "./tsconfig.json"
+  },
+  "plugins": ["react", "@typescript-eslint", "prettier", "simple-import-sort"],
+  "rules": {
+    "import/extensions": 0,
+    "import/no-unresolved": 0,
+    "prettier/prettier": [
+      "error",
+      {
+        "arrowParens": "always",
+        "bracketSameLine": false,
+        "bracketSpacing": true,
+        "semi": false,
+        "experimentalTernaries": false,
+        "singleQuote": true,
+        "jsxSingleQuote": false,
+        "quoteProps": "as-needed",
+        "trailingComma": "all",
+        "singleAttributePerLine": false,
+        "htmlWhitespaceSensitivity": "css",
+        "vueIndentScriptAndStyle": false,
+        "proseWrap": "preserve",
+        "insertPragma": false,
+        "printWidth": 100,
+        "requirePragma": false,
+        "tabWidth": 2,
+        "useTabs": false,
+        "embeddedLanguageFormatting": "auto"
+      }
+    ],
+    "simple-import-sort/imports": [
+      "error",
+      {
+        "groups": [
+          // Packages `react` related packages come first.
+          ["^react", "^@?\\w"],
+          // Side effect imports.
+          ["^\\u0000"],
+          // Internal components, packages.
+          // eslint-disable-next-line no-useless-escape
+          ["^(@/components/layouts)(/.*|$)"],
+          [
+            "^(@/components/features)(/.*|$)",
+            "^(@/components/common)(/.*|$)",
+            "^(@/components/ui)(/.*|$)"
+          ],
+          ["^(@)(/.*|$)"],
+          // Parent imports. Put `..` last.
+          ["^\\.\\.(?!/?$)", "^\\.\\./?$"],
+          // Other relative imports. Put same-folder imports and `.` last.
+          ["^\\./(?=.*/)(?!/?$)", "^\\.(?!/?$)", "^\\./?$"],
+          // Style imports.
+          ["^.+\\.(css)$", "^.+\\.(scss)$"]
+        ]
+      }
+    ],
+    "import/prefer-default-export": 0,
+    "import/no-extraneous-dependencies": 0,
+    "react/require-default-props": 0,
+    "react/react-in-jsx-scope": 0,
+    "react/jsx-props-no-spreading": 0
+  },
+  "overrides": [
+    {
+      "files": ["./src/components/ui/**/*.{js,jsx,ts,tsx}"],
+      "rules": {
+        "react/jsx-props-no-spreading": 0,
+        "react/prop-types": 0,
+        "no-use-before-define": 0,
+        "jsx-a11y/heading-has-content": 0,
+        "@typescript-eslint/no-use-before-define": 0,
+        "@typescript-eslint/no-shadow": 0,
+        "@typescript-eslint/no-unused-vars": 0,
+        "react/jsx-no-constructed-context-values": 0
+      }
+    },
+    {
+      "files": [
+        "./src/components/common/**/*.{js,jsx,ts,tsx}",
+        "./src/components/form/**/*.{js,jsx,ts,tsx}"
+      ],
+      "rules": {
+        "react/jsx-props-no-spreading": 0
+      }
+    }
+  ]
+}
