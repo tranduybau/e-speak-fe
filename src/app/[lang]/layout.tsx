@@ -15,7 +15,7 @@ async function Layout({ children, params }: Props) {
     <>
       <Header dictionary={dictionary} />
 
-      <div className="flex flex-col flex-1">{children}</div>
+      <div className="flex flex-1 flex-col">{children}</div>
 
       <Footer dictionary={dictionary} />
     </>
