@@ -70,7 +70,7 @@ const PopoverContent = React.forwardRef<
             'text-body-2-light',
             cn(
               // base
-              'max-h-[var(--radix-popper-available-height)] min-w-[12.5rem] overflow-hidden rounded-lg border p-2.5 shadow-popover outline-none',
+              'shadow-popover max-h-[var(--radix-popper-available-height)] min-w-[12.5rem] overflow-hidden rounded-lg border p-2.5 outline-none',
               // border color
               // 'border-neutral-2 dark:border-gray-800',
               'border-neutral-2 dark:border-gray-800',
