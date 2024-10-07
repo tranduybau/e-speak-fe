@@ -1,6 +1,6 @@
 import React from 'react'
 
-import Homepage from '@/components/business/home-page'
+import AudioPage from '@/components/business/record-page'
 import { getDictionary } from '@/dictionaries/get-dictionary'
 import { DefaultPageProps } from '@/types/common'
 
@@ -15,5 +15,5 @@ export default async function Home({ params }: DefaultPageProps) {
   console.log('%c => dictionary ', 'background: #0095FF; color: #fff'); // eslint-disable-line
   console.log(new Date()); // eslint-disable-line
 
-  return <Homepage />
+  return <AudioPage />
 }
