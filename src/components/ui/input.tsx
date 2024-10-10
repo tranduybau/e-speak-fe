@@ -40,7 +40,7 @@ const inputVariantDisabled = clsx('border-transparent bg-primary-3 opacity-50 ri
 
 const inputVariants = cva(
   clsx(
-    'w-full bg-primary-3 outline-none transition-all duration-300',
+    'w-full bg-primary-3 outline-none transition-all duration-300 bg-[#2d364f]',
     // font
     'text-body-2-light text-base-white',
     // placeholder
