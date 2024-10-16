@@ -52,29 +52,9 @@
     --input: 217.2 32.6% 17.5%;
     --ring: 212.7 26.8% 83.9%;
   }
-
-  ::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
-  }
-
-  ::-webkit-scrollbar-track {
-    background-color: #16181c;
-  }
-
-  ::-webkit-scrollbar-thumb {
-    @apply bg-secondary-primary/20;
-    border-radius: 4px;
-  }
-
-  ::-webkit-scrollbar-thumb:hover {
-    @apply bg-secondary-primary/30;
-  }
 }
 
 :root {
-  @apply text-base-white bg-neutral-3 text-body-3-light;
-
   font-size: 12px;
 
   @media (min-width: theme('screens.md')) {
@@ -83,36 +63,5 @@
 
   @media (min-width: theme('screens.lg')) {
     font-size: 16px;
-  }
-}
-
-.list-style {
-  @apply relative pl-6;
-
-  &:after {
-    @apply absolute left-0 top-3 size-1.5 -translate-y-1/2 translate-x-[calc(1.5rem/2-0.375rem/2)] rounded-full bg-current content-['']
-  }
-}
-
-.flex-center {
-  @apply flex justify-center items-center;
-}
-
-.flex-col-center {
-  @apply flex flex-col justify-center items-center;
-}
-
-.abs-center {
-  @apply absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2;
-}
-
-.button-outline-gradient {
-  @apply bg-gradient text-transparent bg-clip-text;
-}
-
-.hidden-scrollbar {
-  &::-webkit-scrollbar {
-    width: 0;
-    height: 0;
   }
 }
