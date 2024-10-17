@@ -64,10 +64,10 @@ function AudioRecorder(props: Props) {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
-      <div className="p-6 bg-white rounded-lg shadow-md">
-        <h1 className="text-2xl font-bold mb-4">Audio Recorder</h1>
-        <div className="flex space-x-4 mb-4">
+    <div className="flex min-h-screen flex-col items-center justify-center bg-gray-100">
+      <div className="rounded-lg bg-white p-6 shadow-md">
+        <h1 className="mb-4 text-2xl font-bold">Audio Recorder</h1>
+        <div className="mb-4 flex space-x-4">
           <Button
             onClick={isRecording ? stopRecording : startRecording}
             className={cn(
@@ -81,7 +81,7 @@ function AudioRecorder(props: Props) {
           <Button
             onClick={downloadRecording}
             disabled={!audioURL}
-            className="bg-green-500 hover:bg-green-600 text-white"
+            className="bg-green-500 text-white hover:bg-green-600"
           >
             <Download className="mr-2" />
             <span>{dictionary['Download Recording']}</span>
