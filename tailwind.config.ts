@@ -9,7 +9,16 @@ const config = {
     './src/**/*.{ts,tsx}',
   ],
   prefix: '',
-  theme: {},
+  theme: {
+    extend: {
+      colors: {
+        primary: '#0a092d',
+        sub: '#2e3856',
+        border: '#3d4458',
+        black: '#12141c',
+      },
+    },
+  },
   // eslint-disable-next-line global-require
   plugins: [require('tailwindcss-animate')],
 } satisfies Config
