@@ -9,8 +9,8 @@ import { DictionaryProps } from '@/types/common'
 
 function Header({ dictionary }: DictionaryProps) {
   return (
-    <header className="bg-background w-full border-b">
-      <div className="container mx-auto flex flex-col items-center justify-between gap-4 px-4 py-4 md:flex-row">
+    <header className="w-full·border-b·bg-primaryColor">
+      <div className="container mx-auto flex flex-col items-center justify-between gap-4 px-4 py-4 text-white  md:flex-row">
         <Link href="/" className="flex items-center space-x-2">
           <BookMarked />
           <span className="text-xl font-bold">{dictionary['Learn English']}</span>

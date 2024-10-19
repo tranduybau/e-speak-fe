@@ -5,6 +5,8 @@ import { Loader2, Search } from 'lucide-react'
 
 import { Input } from '@/components/ui/input'
 
+import '@/app/globals.scss'
+
 interface Vocabulary {
   text: string
   translation: string
@@ -55,12 +57,13 @@ export default function VocabularySearch() {
   }, [searchTerm, debouncedSearch])
 
   return (
-    <div className="mx-auto w-full max-w-md space-y-4">
+    <div className="mx-auto w-full max-w-md space-y-4 text-gray-400">
       <div className="relative">
+        <Search className="absolute left-1 top-1/2 z-10 -translate-y-1/2 " />
         <Input
           type="search"
           placeholder="Search vocabularies..."
-          className="relative pl-8 pr-4"
+          className="relative border-borderColor bg-subColor pl-8 pr-4"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
@@ -70,19 +73,22 @@ export default function VocabularySearch() {
       {error && <p className="text-sm text-red-500">{error}</p>}
 
       {results.length > 0 && (
-        <ul className="absolute top-[30px] w-full  space-y-2 bg-white p-[10px]">
+        <ul className="absolute top-[30px] w-full cursor-pointer space-y-2 rounded-md border border-borderColor bg-blackColor py-[10px]">
           {results.map((vocab) => (
-            <li key={vocab.id} className="bg-muted rounded-md p-3">
-              <h3 className="font-semibold">{vocab.text}</h3>
-              <p className="text-muted-foreground text-sm">{vocab.translation}</p>
+            <li key={vocab.id} className="bg-muted·rounded-m p-3 hover:bg-subColor">
+              <h3 className="flex items-center font-semibold">
+                <Search className="mr-2" /> {vocab.text}
+              </h3>
+              {/* <p className="text-muted-foreground text-sm">{vocab.translation}</p> */}
             </li>
           ))}
+          <li className="px-4 hover:underline"> View all result</li>
         </ul>
       )}
 
       {!isLoading && searchTerm && results.length === 0 && (
-        <div className="absolute top-[30px] w-full space-y-2 bg-white p-[10px]">
-          <p className="text-muted-foreground text-sm text-black">No results found</p>
+        <div className="absolute top-[30px] w-full space-y-2 rounded-md bg-blackColor p-[10px]">
+          <p className="text-muted-foreground text-sm ">No results found</p>
         </div>
       )}
     </div>

@@ -1,19 +1,19 @@
-import * as yup from 'yup'
+import * as yup from "yup";
 
 export interface ISearchForm {
-  query: string
+  query: string;
 }
 
 export const DEFAULT_SEARCH_FORM_VALUE: ISearchForm = {
-  query: '',
-}
+  query: "",
+};
 
 export const formSchema: yup.Lazy<ISearchForm> = yup.lazy(() =>
   yup.object({
     query: yup
       .string()
-      .required('This field is required')
-      .min(1, 'Minimum 1 characters')
-      .max(50, 'Maximum 50 characters'),
+      .required("This field is required")
+      .min(1, "Minimum 1 characters")
+      .max(50, "Maximum 50 characters"),
   }),
-)
+);

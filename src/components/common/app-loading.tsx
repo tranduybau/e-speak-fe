@@ -1,9 +1,9 @@
-import React, { memo } from 'react'
-import isEqual from 'react-fast-compare'
+import React, { memo } from "react";
+import isEqual from "react-fast-compare";
 
-import { cn } from '@/lib/utils'
+import { cn } from "@/lib/utils";
 
-import AppIcon from './app-icon'
+import AppIcon from "./app-icon";
 
 const AppLoading = memo(function AppLoading() {
   return (
@@ -13,18 +13,22 @@ const AppLoading = memo(function AppLoading() {
         className="text-primary h-10 w-10 animate-spin md:h-20 md:w-20"
       />
     </div>
-  )
-}, isEqual)
-AppLoading.displayName = 'AppLoading'
+  );
+}, isEqual);
+AppLoading.displayName = "AppLoading";
 
-const LoadingIcon = memo(function LoadingIcon({ className }: { className?: string }) {
+const LoadingIcon = memo(function LoadingIcon({
+  className,
+}: {
+  className?: string;
+}) {
   return (
     <AppIcon
       src="/svg/circle-loading.svg"
-      className={cn('text-primary size-5 animate-spin', className)}
+      className={cn("text-primary size-5 animate-spin", className)}
     />
-  )
-}, isEqual)
-LoadingIcon.displayName = 'LoadingIcon'
+  );
+}, isEqual);
+LoadingIcon.displayName = "LoadingIcon";
 
-export { AppLoading, LoadingIcon }
+export { AppLoading, LoadingIcon };

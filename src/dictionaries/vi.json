@@ -1,3 +1,13 @@
 {
-  "hello": "hello"
+  "Contact Us": "Contact Us",
+  "About us": "About us",
+  "Service": "Service",
+  "Subject": "Subject",
+  "Enter subject": "Enter subject",
+  "Messenger": "Messenger",
+  "Write your question or suggestion...": "Write your question or suggestion...",
+  "Send Messenger": "Send Messenger",
+  "Sign Up": "Sign Up",
+  "Log In": "Log In",
+  "Learn English": "Learn English"
 }

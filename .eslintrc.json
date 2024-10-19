@@ -101,7 +101,10 @@
         "./src/components/form/**/*.{js,jsx,ts,tsx}"
       ],
       "rules": {
-        "react/jsx-props-no-spreading": 0
+        "react/jsx-props-no-spreading": 0,
+        "prettier/prettier": [ "error",
+          { "endOfLine": "auto" }
+        ]
       }
     }
   ]

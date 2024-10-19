@@ -8,7 +8,7 @@ function Footer({ dictionary }: DictionaryProps) {
     <footer className="relative overflow-hidden pt-[64px]">
       <div className="container">
         <div>Logo</div>
-        <div>{dictionary.hello}</div>
+        <div>{dictionary['Contact Us']}</div>
       </div>
     </footer>
   )

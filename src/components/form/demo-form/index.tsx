@@ -1,22 +1,28 @@
-'use client'
+"use client";
 
-import { memo } from 'react'
-import isEqual from 'react-fast-compare'
-import { useForm } from 'react-hook-form'
-import { yupResolver } from '@hookform/resolvers/yup'
-import * as yup from 'yup'
+import { memo } from "react";
+import isEqual from "react-fast-compare";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
 
-import { Button } from '@/components/ui/button'
-import { Form, FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form'
-import { Input } from '@/components/ui/input'
+import { Button } from "@/components/ui/button";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 
 import {
   mobileMenuStoreActions,
   // useMobileMenuModalStore,
   // useMobileMenuStoreGetter,
-} from '@/store/use-modal-store'
+} from "@/store/use-modal-store";
 
-import { DEFAULT_SEARCH_FORM_VALUE, formSchema } from './schema'
+import { DEFAULT_SEARCH_FORM_VALUE, formSchema } from "./schema";
 
 function DemoForm() {
   // const isOpeningMobileMenu = useMobileMenuStoreGetter('isOpen')
@@ -24,13 +30,13 @@ function DemoForm() {
   const form = useForm<yup.InferType<typeof formSchema>>({
     resolver: yupResolver(formSchema),
     defaultValues: DEFAULT_SEARCH_FORM_VALUE,
-  })
+  });
 
   const onSubmit = (values: yup.InferType<typeof formSchema>) => {
     console.log(values); // eslint-disable-line
     console.log("%c => value ", "background: #0095FF; color: #fff"); // eslint-disable-line
     console.log(new Date()); // eslint-disable-line
-  }
+  };
 
   return (
     <Form {...form}>
@@ -68,7 +74,7 @@ function DemoForm() {
         </Button>
       </form>
     </Form>
-  )
+  );
 }
 
-export default memo(DemoForm, isEqual)
+export default memo(DemoForm, isEqual);
