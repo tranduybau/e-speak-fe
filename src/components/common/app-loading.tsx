@@ -10,7 +10,7 @@ const AppLoading = memo(function AppLoading() {
     <div className="absolute left-0 top-0 z-50 flex h-full w-full items-center justify-center bg-white delay-1000 duration-1000">
       <AppIcon
         src="/svg/circle-loading.svg"
-        className="text-primary h-10 w-10 animate-spin md:h-20 md:w-20"
+        className="h-10 w-10 animate-spin text-primary md:h-20 md:w-20"
       />
     </div>
   );
@@ -25,7 +25,7 @@ const LoadingIcon = memo(function LoadingIcon({
   return (
     <AppIcon
       src="/svg/circle-loading.svg"
-      className={cn("text-primary size-5 animate-spin", className)}
+      className={cn("size-5 animate-spin text-primary", className)}
     />
   );
 }, isEqual);

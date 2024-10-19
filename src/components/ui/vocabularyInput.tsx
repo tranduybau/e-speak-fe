@@ -63,7 +63,7 @@ export default function VocabularySearch() {
         <Input
           type="search"
           placeholder="Search vocabularies..."
-          className="relative border-borderColor bg-subColor pl-8 pr-4"
+          className="relative border-border bg-sub pl-8 pr-4"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
@@ -73,9 +73,9 @@ export default function VocabularySearch() {
       {error && <p className="text-sm text-red-500">{error}</p>}
 
       {results.length > 0 && (
-        <ul className="absolute top-[30px] w-full cursor-pointer space-y-2 rounded-md border border-borderColor bg-blackColor py-[10px]">
+        <ul className="absolute top-[30px] w-full cursor-pointer space-y-2 rounded-md border border-border bg-black py-[10px]">
           {results.map((vocab) => (
-            <li key={vocab.id} className="bg-muted·rounded-m p-3 hover:bg-subColor">
+            <li key={vocab.id} className="bg-muted rounded-m p-3 hover:bg-sub">
               <h3 className="flex items-center font-semibold">
                 <Search className="mr-2" /> {vocab.text}
               </h3>
@@ -87,7 +87,7 @@ export default function VocabularySearch() {
       )}
 
       {!isLoading && searchTerm && results.length === 0 && (
-        <div className="absolute top-[30px] w-full space-y-2 rounded-md bg-blackColor p-[10px]">
+        <div className="absolute top-[30px] w-full space-y-2 rounded-md bg-black p-[10px]">
           <p className="text-muted-foreground text-sm ">No results found</p>
         </div>
       )}
