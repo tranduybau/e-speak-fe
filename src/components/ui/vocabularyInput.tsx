@@ -34,7 +34,7 @@ export default function VocabularySearch() {
 
       try {
         const response = await fetch(
-          `http://103.163.214.192:9000/api/vocabularies/search?word=${searchValue}`,
+          `${process.env.NEXT_PUBLIC_API_URL}/vocabularies/search?word=${searchValue}`,
         )
         if (!response.ok) {
           throw new Error('Failed to fetch data')
