@@ -1,3 +1,11 @@
+
 {
-  "hello": "hello"
+  "Contact Us": "Contact Us",
+  "Your browser does not support the audio element." : "Your browser does not support the audio element.",
+  "Download Recording": "Download Recording",
+  "hello": "hello",
+  "Stop Recording": "Stop Recording",
+  "Start Recording": "Start Recording",
+  "Audio Recorder": "Audio Recorder",
+  "Captions": "Captions"
 }
