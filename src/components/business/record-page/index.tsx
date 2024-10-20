@@ -3,7 +3,7 @@ import React from 'react'
 import { getDictionary } from '@/dictionaries/get-dictionary'
 import { LocaleEnum } from '@/types/locales'
 
-import AudioRecorder from './audioRecord'
+import AudioRecorder from './audio-recorder'
 
 async function RecordPage() {
   const dictionary = await getDictionary(LocaleEnum.EN)
