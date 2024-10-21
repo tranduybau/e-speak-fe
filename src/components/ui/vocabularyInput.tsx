@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState } from 'react'
 import { Loader2, Search } from 'lucide-react'
+import { useDebounceCallback } from 'usehooks-ts'
 
 import { Input } from '@/components/ui/input'
 
@@ -23,7 +24,7 @@ export default function VocabularySearch() {
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const debouncedSearch = useCallback(
-    debounce(async (searchValue: string) => {
+    useDebounceCallback(async (searchValue: string) => {
       if (searchValue.trim() === '') {
         setResults([])
         return
@@ -93,16 +94,4 @@ export default function VocabularySearch() {
       )}
     </div>
   )
-}
-
-function debounce<T extends (...args: any[]) => any>(
-  func: T,
-  wait: number,
-): (...args: Parameters<T>) => void {
-  let timeout: NodeJS.Timeout | null = null
-
-  return (...args: Parameters<T>) => {
-    if (timeout) clearTimeout(timeout)
-    timeout = setTimeout(() => func(...args), wait)
-  }
 }
