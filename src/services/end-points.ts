@@ -8,6 +8,10 @@ const ENDPOINTS = {
   VOCABULARY: {
     GET_DETAIL: (id: string) => `vocabularies/detail/${id}`,
   },
+
+  PHONEMES: {
+    CHECK: '/check/phonemes',
+  },
 }
 
 export default ENDPOINTS
