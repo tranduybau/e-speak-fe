@@ -10,7 +10,7 @@ const ENDPOINTS = {
   },
 
   PHONEMES: {
-    CHECK: '/check/phonemes',
+    CHECK: '/check-phonemes',
   },
 }
 

@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react'
 
-export function useAudioRecorder() {
+export function useRecorder() {
   const [isRecording, setIsRecording] = useState(false)
   const mediaRecorderRef = useRef<MediaRecorder | null>(null)
   const audioChunksRef = useRef<Blob[]>([])
