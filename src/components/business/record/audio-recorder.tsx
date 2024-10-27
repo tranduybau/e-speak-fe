@@ -1,8 +1,9 @@
 'use client'
 
 import React, { useRef, useState } from 'react'
-import { Download, Mic, Square } from 'lucide-react'
+import { Mic, Square } from 'lucide-react'
 
+import DownloadRecording from '@/components/features/dowload-record/index'
 import { Button } from '@/components/ui/button'
 
 import { cn } from '@/lib/utils'
@@ -51,22 +52,10 @@ function AudioRecorder(props: Props) {
     }
   }
 
-  const downloadRecording = () => {
-    if (audioURL) {
-      const a = document.createElement('a')
-      document.body.appendChild(a)
-      a.style.cssText = 'display: none'
-      a.href = audioURL
-      a.download = 'recording.wav'
-      a.click()
-      window.URL.revokeObjectURL(audioURL)
-    }
-  }
-
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-gray-100">
       <div className="rounded-lg bg-white p-6 shadow-md">
-        <h1 className="mb-4 text-2xl font-bold">Audio Recorder</h1>
+        <h1 className="mb-4 text-2xl font-bold">{dictionary['Audio Recorder']}</h1>
         <div className="mb-4 flex space-x-4">
           <Button
             onClick={isRecording ? stopRecording : startRecording}
@@ -75,21 +64,16 @@ function AudioRecorder(props: Props) {
               isRecording ? 'bg-red-500 hover:bg-red-600' : 'bg-blue-500 hover:bg-blue-600',
             )}
           >
-            {isRecording ? <Square className="mr-2" /> : <Mic className="mr-2" />}
-            {isRecording ? 'Stop Recording' : 'Start Recording'}
+            <span>
+              {isRecording ? <Square className="mr-2" /> : <Mic className="mr-2" />}
+              {isRecording ? dictionary['Stop Recording'] : dictionary['Start Recording']}
+            </span>
           </Button>
-          <Button
-            onClick={downloadRecording}
-            disabled={!audioURL}
-            className="bg-green-500 text-white hover:bg-green-600"
-          >
-            <Download className="mr-2" />
-            <span>{dictionary['Download Recording']}</span>
-          </Button>
+          <DownloadRecording audioURL={audioURL} dictionary={dictionary} />
         </div>
         {audioURL && (
-          /* eslint-disable-next-line jsx-a11y/media-has-caption */
           <audio controls src={audioURL} className="w-full">
+            <track kind="captions" src="" label={dictionary.Captions} />
             {dictionary['Your browser does not support the audio element.']}
           </audio>
         )}
