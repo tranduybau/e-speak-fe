@@ -1,12 +1,12 @@
-import React from 'react'
+import AudioRecorder from '@/components/feature/audio-recorder'
+import { LocaleKeys } from '@/types/locales'
 
-import { getDictionary } from '@/dictionaries/get-dictionary'
-import { LocaleEnum } from '@/types/locales'
+interface Props {
+  dictionary: LocaleKeys
+}
 
-import AudioRecorder from './audio-recorder'
-
-async function RecordComponent() {
-  const dictionary = await getDictionary(LocaleEnum.EN)
+async function RecordWrapper(props: Props) {
+  const { dictionary } = props
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-gray-100">
@@ -15,4 +15,4 @@ async function RecordComponent() {
   )
 }
 
-export default RecordComponent
+export default RecordWrapper

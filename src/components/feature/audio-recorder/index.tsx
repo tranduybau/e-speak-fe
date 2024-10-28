@@ -3,11 +3,12 @@
 import React, { useRef, useState } from 'react'
 import { Mic, Square } from 'lucide-react'
 
-import DownloadRecording from '@/components/features/dowload-record/index'
 import { Button } from '@/components/ui/button'
 
 import { cn } from '@/lib/utils'
 import { LocaleKeys } from '@/types/locales'
+
+import DownloadRecording from '../dowload-record'
 
 interface Props {
   dictionary: LocaleKeys

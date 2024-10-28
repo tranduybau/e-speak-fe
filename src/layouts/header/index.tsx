@@ -1,5 +1,3 @@
-import React from 'react'
-
 import { DictionaryProps } from '@/types/common'
 
 function Header({ dictionary }: DictionaryProps) {
