@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { Volume2 } from 'lucide-react'
+import { Mic, Pause, Play } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
 
@@ -12,7 +12,7 @@ interface CheckPhonemesProps {
 }
 
 export default function CheckPhonemes({ groundTruth }: CheckPhonemesProps) {
-  const { audioUrl, audioBlob, startRecording, stopRecording } = useRecorder()
+  const { isRecording, audioUrl, audioBlob, toggleRecording } = useRecorder()
   const { setAudioUrl, toggleAudio, isPlaying } = useAudio(null)
 
   useEffect(() => {
@@ -28,20 +28,23 @@ export default function CheckPhonemes({ groundTruth }: CheckPhonemesProps) {
 
   return (
     <div>
-      <Button onClick={startRecording}>Start</Button>
-      <Button onClick={stopRecording}>Stop</Button>
+      <Button variant="outline" onClick={toggleRecording}>
+        <Mic className={`h-8 w-8 ${isRecording ? 'text-violet-500' : 'text-gray-500'}`} />
+      </Button>
       <div className="mb-4 flex items-center justify-start">
         <Button
           onClick={toggleAudio}
           size="icon"
           aria-label={isPlaying ? 'Pause pronunciation' : 'Play pronunciation'}
+          disabled={!audioUrl}
         >
-          <Volume2 className={`h-4 w-4 ${isPlaying ? 'text-primary' : ''}`} />
+          {isPlaying ? <Pause className="h-8 w-8" /> : <Play className="h-8 w-8" />}
         </Button>
       </div>
       <Button variant="outline" onClick={submit}>
         Check
       </Button>
+      {audioUrl && <a href={audioUrl}>{audioUrl}</a>}
     </div>
   )
 }

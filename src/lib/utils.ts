@@ -25,3 +25,10 @@ export const decimalScaleNumber = (number: number | string, decimal: number) => 
 
   return parts.join('.')
 }
+
+export const getCodePoints = (str: string) => {
+  return Array.from(str)
+    .map((char) => char.codePointAt(0)?.toString(16).padStart(4, '0'))
+    .map((hex) => `\\u${hex}`)
+    .join()
+}

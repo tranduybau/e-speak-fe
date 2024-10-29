@@ -9,7 +9,13 @@ export function useRecorder() {
 
   const startRecording = async () => {
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true })
+      const stream = await navigator.mediaDevices.getUserMedia({
+        audio: {
+          sampleRate: 16000,
+          channelCount: 1,
+          noiseSuppression: false,
+        },
+      })
       mediaRecorderRef.current = new MediaRecorder(stream)
 
       mediaRecorderRef.current.ondataavailable = (ev) => {
@@ -36,11 +42,20 @@ export function useRecorder() {
     setIsRecording(false)
   }
 
+  const toggleRecording = () => {
+    if (isRecording) {
+      stopRecording()
+    } else {
+      startRecording()
+    }
+  }
+
   return {
     isRecording,
     audioUrl,
     audioBlob,
     startRecording,
     stopRecording,
+    toggleRecording,
   }
 }

@@ -1,5 +1,5 @@
 const ENDPOINTS = {
-  BASE_URL: 'http://localhost:9000/api',
+  BASE_URL: 'http://103.163.214.192:9000/api',
 
   // Auth
   SIGN_IN: '/users/login',
