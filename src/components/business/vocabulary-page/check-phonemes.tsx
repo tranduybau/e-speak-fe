@@ -1,11 +1,13 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { Mic, Pause, Play } from 'lucide-react'
 
+import PhonemesResult from '@/components/common/phonemes-result'
 import { Button } from '@/components/ui/button'
 
 import { useAudio } from '@/components/hooks/use-audio'
 import { useRecorder } from '@/components/hooks/use-recorder'
 import PhonemesService from '@/services/csr/phonemes'
+import { CheckPhonemesResult } from '@/types/phonemes'
 
 interface CheckPhonemesProps {
   groundTruth: string
@@ -14,6 +16,7 @@ interface CheckPhonemesProps {
 export default function CheckPhonemes({ groundTruth }: CheckPhonemesProps) {
   const { isRecording, audioUrl, audioBlob, toggleRecording } = useRecorder()
   const { setAudioUrl, toggleAudio, isPlaying } = useAudio(null)
+  const [phonemesResult, setPhonemesResult] = useState<CheckPhonemesResult>()
 
   useEffect(() => {
     setAudioUrl(audioUrl)
@@ -22,8 +25,7 @@ export default function CheckPhonemes({ groundTruth }: CheckPhonemesProps) {
   const submit = async () => {
     if (!audioBlob) return
     const res = await PhonemesService.check(audioBlob, groundTruth)
-
-    console.log(res)
+    setPhonemesResult(res)
   }
 
   return (
@@ -44,7 +46,17 @@ export default function CheckPhonemes({ groundTruth }: CheckPhonemesProps) {
       <Button variant="outline" onClick={submit}>
         Check
       </Button>
-      {audioUrl && <a href={audioUrl}>{audioUrl}</a>}
+
+      {phonemesResult ? (
+        <PhonemesResult
+          characters={phonemesResult.characters}
+          groundTruthBenchmark={phonemesResult.ground_truth_benchmark}
+        />
+      ) : (
+        <div>{groundTruth}</div>
+      )}
+
+      {phonemesResult && <p>Point: {phonemesResult.confident * 100}%</p>}
     </div>
   )
 }

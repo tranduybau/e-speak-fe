@@ -12,8 +12,14 @@ export const getCharacterCategories = (
   let isCurrentRed = false
   let currentCharIndex = 0
   groundTruthBenchmark.split('').forEach((char) => {
-    const { char: truthChar, confidence } = characters[currentCharIndex]
-    if (truthChar === char) currentCharIndex += 1
+    let truthChar: string = ''
+    let confidence: number = 0
+
+    if (currentCharIndex < characters.length) {
+      truthChar = characters[currentCharIndex].char
+      confidence = characters[currentCharIndex].confidence
+      if (truthChar === char) currentCharIndex += 1
+    }
 
     switch (char) {
       case ',':
