@@ -34,7 +34,7 @@ function VocabularyDetailPage() {
   }
 
   return (
-    <Card className="mx-auto w-full max-w-2xl">
+    <Card className="mx-auto w-auto max-w-2xl">
       <CardHeader>
         <CardTitle className="text-3xl font-bold">{vocabulary.text}</CardTitle>
         <CardDescription className="text-xl">{vocabulary.translation}</CardDescription>
@@ -46,7 +46,7 @@ function VocabularyDetailPage() {
             size="icon"
             aria-label={isPlaying ? 'Pause pronunciation' : 'Play pronunciation'}
           >
-            <Volume2 className={`h-4 w-4 ${isPlaying ? 'text-primary' : ''}`} />
+            <Volume2 className={`h-6 w-6 ${isPlaying ? 'text-primary' : ''}`} />
           </Button>
           <span className="font-mono text-lg">{vocabulary.transcript_ipa}</span>
         </div>

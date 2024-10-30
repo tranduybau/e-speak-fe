@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react'
-import { Mic, Pause, Play } from 'lucide-react'
+import { Mic, Volume2 } from 'lucide-react'
 
 import PhonemesResult from '@/components/common/phonemes-result'
 import { Button } from '@/components/ui/button'
+import { Separator } from '@/components/ui/separator'
 
 import { useAudio } from '@/components/hooks/use-audio'
 import { useRecorder } from '@/components/hooks/use-recorder'
@@ -22,41 +23,55 @@ export default function CheckPhonemes({ groundTruth }: CheckPhonemesProps) {
     setAudioUrl(audioUrl)
   }, [audioUrl, setAudioUrl])
 
-  const submit = async () => {
-    if (!audioBlob) return
-    const res = await PhonemesService.check(audioBlob, groundTruth)
-    setPhonemesResult(res)
-  }
+  useEffect(() => {
+    const submit = async () => {
+      if (!audioBlob) return
+      const res = await PhonemesService.check(audioBlob, groundTruth)
+      setPhonemesResult(res)
+    }
+
+    submit()
+  }, [audioBlob, groundTruth])
 
   return (
     <div>
-      <Button variant="outline" onClick={toggleRecording}>
-        <Mic className={`h-8 w-8 ${isRecording ? 'text-violet-500' : 'text-gray-500'}`} />
-      </Button>
-      <div className="mb-4 flex items-center justify-start">
-        <Button
-          onClick={toggleAudio}
-          size="icon"
-          aria-label={isPlaying ? 'Pause pronunciation' : 'Play pronunciation'}
-          disabled={!audioUrl}
-        >
-          {isPlaying ? <Pause className="h-8 w-8" /> : <Play className="h-8 w-8" />}
-        </Button>
-      </div>
-      <Button variant="outline" onClick={submit}>
-        Check
+      <Button
+        className={`flex-column flex w-full ${isRecording ? 'text-violet-500' : 'text-gray-500'}`}
+        variant="outline"
+        size="lg"
+        onClick={toggleRecording}
+      >
+        <Mic className="h-8 w-8" />
+        <span className="ml-2 text-lg">Record</span>
       </Button>
 
-      {phonemesResult ? (
-        <PhonemesResult
-          characters={phonemesResult.characters}
-          groundTruthBenchmark={phonemesResult.ground_truth_benchmark}
-        />
-      ) : (
-        <div>{groundTruth}</div>
+      {phonemesResult && (
+        <div className="mt-4">
+          <Separator />
+          <p className="mb-4 text-center text-xl font-bold">
+            Point: {phonemesResult.confident * 100}%
+          </p>
+          <PhonemesResult
+            characters={phonemesResult.characters}
+            groundTruthBenchmark={phonemesResult.ground_truth_benchmark}
+          />
+
+          <p className="">Predict:</p>
+          <div className="flex items-center justify-start">
+            <Button
+              onClick={toggleAudio}
+              size="icon"
+              aria-label={isPlaying ? 'Pause pronunciation' : 'Play pronunciation'}
+            >
+              <Volume2 className={`h-6 w-6 ${isPlaying ? 'text-primary' : ''}`} />
+            </Button>
+            <PhonemesResult
+              characters={phonemesResult.characters}
+              groundTruthBenchmark={phonemesResult.predict}
+            />
+          </div>
+        </div>
       )}
-
-      {phonemesResult && <p>Point: {phonemesResult.confident * 100}%</p>}
     </div>
   )
 }
