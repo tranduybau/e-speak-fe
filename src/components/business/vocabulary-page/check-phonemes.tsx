@@ -1,4 +1,7 @@
+'use client'
+
 import { useEffect, useState } from 'react'
+import { useBoolean } from 'ahooks'
 import { Mic, Volume2 } from 'lucide-react'
 
 import PhonemesResult from '@/components/common/phonemes-result'
@@ -18,20 +21,32 @@ export default function CheckPhonemes({ groundTruth }: CheckPhonemesProps) {
   const { isRecording, audioUrl, audioBlob, toggleRecording } = useRecorder()
   const { setAudioUrl, toggleAudio, isPlaying } = useAudio(null)
   const [phonemesResult, setPhonemesResult] = useState<CheckPhonemesResult>()
+  const [
+    isCheckingPhonemes,
+    { setTrue: setTrueCheckingPhonemes, setFalse: setFalseCheckingPhonemes },
+  ] = useBoolean()
 
   useEffect(() => {
     setAudioUrl(audioUrl)
   }, [audioUrl, setAudioUrl])
 
   useEffect(() => {
-    const submit = async () => {
-      if (!audioBlob) return
-      const res = await PhonemesService.check(audioBlob, groundTruth)
-      setPhonemesResult(res)
+    const submit = () => {
+      if (!audioBlob) {
+        setFalseCheckingPhonemes()
+        return
+      }
+
+      PhonemesService.check(audioBlob, groundTruth)
+        .then(setPhonemesResult)
+        .finally(() => {
+          setFalseCheckingPhonemes()
+        })
     }
 
+    setTrueCheckingPhonemes()
     submit()
-  }, [audioBlob, groundTruth])
+  }, [audioBlob, groundTruth, setFalseCheckingPhonemes, setTrueCheckingPhonemes])
 
   return (
     <div>
@@ -62,6 +77,7 @@ export default function CheckPhonemes({ groundTruth }: CheckPhonemesProps) {
               onClick={toggleAudio}
               size="icon"
               aria-label={isPlaying ? 'Pause pronunciation' : 'Play pronunciation'}
+              disabled={isCheckingPhonemes}
             >
               <Volume2 className={`h-6 w-6 ${isPlaying ? 'text-primary' : ''}`} />
             </Button>

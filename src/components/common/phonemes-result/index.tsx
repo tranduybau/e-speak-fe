@@ -13,9 +13,8 @@ export default function PhonemesResult({ characters, groundTruthBenchmark }: Pho
 
   return (
     <div className="font-mono">
-      {characterCategories.map(({ char, category }, index) => (
-        // eslint-disable-next-line react/no-array-index-key
-        <CharacterWithCategory key={index} category={category}>
+      {characterCategories.map(({ char, category, id }) => (
+        <CharacterWithCategory key={id} category={category}>
           {char}
         </CharacterWithCategory>
       ))}

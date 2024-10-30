@@ -5,6 +5,7 @@ import { VocabularyDetail } from '@/types/vocabulary'
 import ENDPOINTS from '../end-points'
 import axiosClient from '..'
 
+// https://github.com/tranduybau/e-speak-fe/blob/d96f282050f7043b31d93616d7989169ece68848/src/services/csr/vocabularies.ts
 const VocabulariesService = {
   async getDetail(id: string): Promise<VocabularyDetail> {
     return axiosClient

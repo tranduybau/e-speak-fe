@@ -1,7 +1,8 @@
+import { randomId } from '@/lib/random-id'
 import { PhonemeCharacter } from '@/types/phonemes'
 
 export type Category = 'green' | 'yellow' | 'red'
-export type CharacterCategory = { char: string; category: Category }
+export type CharacterCategory = { char: string; category: Category; id: string }
 
 export const getCharacterCategories = (
   characters: PhonemeCharacter[],
@@ -35,16 +36,19 @@ export const getCharacterCategories = (
           characterCategories.push({
             char,
             category: 'red',
+            id: randomId(),
           })
         } else if (confidence >= 0.8) {
           characterCategories.push({
             char,
             category: 'green',
+            id: randomId(),
           })
         } else {
           characterCategories.push({
             char,
             category: 'yellow',
+            id: randomId(),
           })
         }
     }

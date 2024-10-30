@@ -1,58 +1,35 @@
-'use client'
-
-import { useEffect, useState } from 'react'
-import { Volume2 } from 'lucide-react'
-import { notFound, useSearchParams } from 'next/navigation'
-
-import { AppLoading } from '@/components/common/app-loading'
-import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 
-import { useAudio } from '@/components/hooks/use-audio'
-import VocabulariesService from '@/services/csr/vocabularies'
-import { VocabularyDetail } from '@/types/vocabulary'
+import { ModelsVocabulary } from '@/@types/api.type'
+import ButtonPlayingWord from '@/components/feature/button-playing-word'
+import { LocaleKeys } from '@/types/locales'
 
 import CheckPhonemes from './check-phonemes'
 
-function VocabularyDetailPage() {
-  const searchParams = useSearchParams()
-  const [vocabulary, setVocabulary] = useState<VocabularyDetail>()
-  const id = searchParams.get('id')
-  const { setAudioUrl, toggleAudio, isPlaying } = useAudio(null)
+interface VocabularyDetailPageProps {
+  dictionary: LocaleKeys
+  data: ModelsVocabulary
+}
 
-  useEffect(() => {
-    if (!id) notFound()
-    ;(async () => {
-      const data = await VocabulariesService.getDetail(id)
-      setVocabulary(data)
-      setAudioUrl(data.audio_url)
-    })()
-  }, [id, setAudioUrl])
-
-  if (!vocabulary) {
-    return <AppLoading />
-  }
+function VocabularyDetailPage(props: VocabularyDetailPageProps) {
+  const { dictionary, data } = props
 
   return (
     <Card className="mx-auto w-auto max-w-2xl">
       <CardHeader>
-        <CardTitle className="text-3xl font-bold">{vocabulary.text}</CardTitle>
-        <CardDescription className="text-xl">{vocabulary.translation}</CardDescription>
+        <CardTitle className="text-3xl font-bold">{data.text}</CardTitle>
+        <CardDescription className="text-xl">{data.translation}</CardDescription>
       </CardHeader>
       <CardContent>
         <div className="mb-4 flex items-center justify-start">
-          <Button
-            onClick={toggleAudio}
-            size="icon"
-            aria-label={isPlaying ? 'Pause pronunciation' : 'Play pronunciation'}
-          >
-            <Volume2 className={`h-6 w-6 ${isPlaying ? 'text-primary' : ''}`} />
-          </Button>
-          <span className="font-mono text-lg">{vocabulary.transcript_ipa}</span>
+          <ButtonPlayingWord dictionary={dictionary} audioUrl={data.audio_url} />
+          <span className="font-mono text-lg">{data.transcript_ipa}</span>
         </div>
-        <div className="mb-2">
-          <CheckPhonemes groundTruth={vocabulary.transcript_ipa} />
-        </div>
+        {!!data.transcript_ipa && (
+          <div className="mb-2">
+            <CheckPhonemes groundTruth={data.transcript_ipa} />
+          </div>
+        )}
       </CardContent>
     </Card>
   )

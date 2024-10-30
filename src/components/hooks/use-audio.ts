@@ -26,6 +26,7 @@ export const useAudio = (initUrl: string | null) => {
   }
 
   return {
+    url,
     setAudioUrl: setUrl,
     isPlaying,
     toggleAudio,
