@@ -1,5 +1,3 @@
-import React from 'react'
-
 import Homepage from '@/components/business/home-page'
 import { getDictionary } from '@/dictionaries/get-dictionary'
 import { DefaultPageProps } from '@/types/common'

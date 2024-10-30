@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react'
+import { memo, useId } from 'react'
 import isEqual from 'react-fast-compare'
 import Link, { LinkProps } from 'next/link'
 import { usePathname } from 'next/navigation'
@@ -24,7 +24,7 @@ function AppLink(props: React.PropsWithChildren<Props>) {
     ...others
   } = props
 
-  const uuid = React.useId()
+  const uuid = useId()
   const pathname = usePathname()
 
   const locale = pathname.split('/')[1]
@@ -39,4 +39,4 @@ function AppLink(props: React.PropsWithChildren<Props>) {
   )
 }
 
-export default React.memo(AppLink, isEqual)
+export default memo(AppLink, isEqual)
