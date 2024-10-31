@@ -1,22 +1,21 @@
-import { PhonemeCharacter } from '@/types/phonemes'
+import { ModelPhonemeCharacter } from '@/types/phonemes'
 
-import { CharacterWithCategory } from './character-with-category'
 import { getCharacterCategories } from './utils'
 
 interface PhonemesResultProps {
-  characters: PhonemeCharacter[]
-  groundTruthBenchmark: string
+  characters: ModelPhonemeCharacter[]
+  groundBenchmark: string
 }
 
-export default function PhonemesResult({ characters, groundTruthBenchmark }: PhonemesResultProps) {
-  const characterCategories = getCharacterCategories(characters, groundTruthBenchmark)
+export default function PhonemesResult({ characters, groundBenchmark }: PhonemesResultProps) {
+  const characterCategories = getCharacterCategories(characters, groundBenchmark)
 
   return (
     <div className="font-mono">
-      {characterCategories.map(({ char, category, id }) => (
-        <CharacterWithCategory key={id} category={category}>
+      {characterCategories.map(({ char, textColorClassName, id }) => (
+        <span key={id} className={textColorClassName}>
           {char}
-        </CharacterWithCategory>
+        </span>
       ))}
     </div>
   )

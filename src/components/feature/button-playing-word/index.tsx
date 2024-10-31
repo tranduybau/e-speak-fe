@@ -11,7 +11,7 @@ import { LocaleKeys } from '@/types/locales'
 
 interface Props {
   dictionary: LocaleKeys
-  audioUrl?: string
+  audioUrl?: string | null
 }
 
 function ButtonPlayingWord(props: Props) {
@@ -30,6 +30,7 @@ function ButtonPlayingWord(props: Props) {
       onClick={toggleAudio}
       size="icon"
       aria-label={isPlaying ? dictionary['Pause pronunciation'] : dictionary['Play pronunciation']}
+      disabled={!url}
     >
       <Volume2 className={`h-6 w-6 ${isPlaying ? 'text-primary' : ''}`} />
     </Button>

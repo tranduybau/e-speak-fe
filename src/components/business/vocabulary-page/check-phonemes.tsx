@@ -2,50 +2,46 @@
 
 import { useEffect, useState } from 'react'
 import { useBoolean } from 'ahooks'
-import { Mic, Volume2 } from 'lucide-react'
+import { Mic } from 'lucide-react'
 
 import PhonemesResult from '@/components/common/phonemes-result'
 import { Button } from '@/components/ui/button'
-import { Separator } from '@/components/ui/separator'
 
-import { useAudio } from '@/components/hooks/use-audio'
+import ButtonPlayingWord from '@/components/feature/button-playing-word'
 import { useRecorder } from '@/components/hooks/use-recorder'
-import PhonemesService from '@/services/csr/phonemes'
-import { CheckPhonemesResult } from '@/types/phonemes'
+import devLog from '@/lib/dev-log'
+import PhonemesService from '@/services/phonemes'
+import { LocaleKeys } from '@/types/locales'
+import { ModelCheckPhonemes } from '@/types/phonemes'
 
 interface CheckPhonemesProps {
+  dictionary: LocaleKeys
   groundTruth: string
 }
 
-export default function CheckPhonemes({ groundTruth }: CheckPhonemesProps) {
+export default function CheckPhonemes({ groundTruth, dictionary }: CheckPhonemesProps) {
   const { isRecording, audioUrl, audioBlob, toggleRecording } = useRecorder()
-  const { setAudioUrl, toggleAudio, isPlaying } = useAudio(null)
-  const [phonemesResult, setPhonemesResult] = useState<CheckPhonemesResult>()
+  const [phonemesResult, setPhonemesResult] = useState<ModelCheckPhonemes>()
   const [
     isCheckingPhonemes,
     { setTrue: setTrueCheckingPhonemes, setFalse: setFalseCheckingPhonemes },
   ] = useBoolean()
 
   useEffect(() => {
-    setAudioUrl(audioUrl)
-  }, [audioUrl, setAudioUrl])
-
-  useEffect(() => {
-    const submit = () => {
+    ;(async () => {
       if (!audioBlob) {
-        setFalseCheckingPhonemes()
         return
       }
 
-      PhonemesService.check(audioBlob, groundTruth)
-        .then(setPhonemesResult)
-        .finally(() => {
-          setFalseCheckingPhonemes()
-        })
-    }
+      setTrueCheckingPhonemes()
+      const res = await PhonemesService.checkPhonemes(audioBlob, groundTruth)
+      if (res.isError) {
+        devLog(res.message)
+      }
 
-    setTrueCheckingPhonemes()
-    submit()
+      setPhonemesResult(res.data!)
+      setFalseCheckingPhonemes()
+    })()
   }, [audioBlob, groundTruth, setFalseCheckingPhonemes, setTrueCheckingPhonemes])
 
   return (
@@ -54,6 +50,7 @@ export default function CheckPhonemes({ groundTruth }: CheckPhonemesProps) {
         className={`flex-column flex w-full ${isRecording ? 'text-violet-500' : 'text-gray-500'}`}
         variant="outline"
         size="lg"
+        disabled={isCheckingPhonemes}
         onClick={toggleRecording}
       >
         <Mic className="h-8 w-8" />
@@ -61,29 +58,21 @@ export default function CheckPhonemes({ groundTruth }: CheckPhonemesProps) {
       </Button>
 
       {phonemesResult && (
-        <div className="mt-4">
-          <Separator />
+        <div className="border-t border-t-black pt-4">
           <p className="mb-4 text-center text-xl font-bold">
             Point: {phonemesResult.confident * 100}%
           </p>
           <PhonemesResult
             characters={phonemesResult.characters}
-            groundTruthBenchmark={phonemesResult.ground_truth_benchmark}
+            groundBenchmark={phonemesResult.ground_truth_benchmark}
           />
 
           <p className="">Predict:</p>
           <div className="flex items-center justify-start">
-            <Button
-              onClick={toggleAudio}
-              size="icon"
-              aria-label={isPlaying ? 'Pause pronunciation' : 'Play pronunciation'}
-              disabled={isCheckingPhonemes}
-            >
-              <Volume2 className={`h-6 w-6 ${isPlaying ? 'text-primary' : ''}`} />
-            </Button>
+            <ButtonPlayingWord dictionary={dictionary} audioUrl={audioUrl} />
             <PhonemesResult
               characters={phonemesResult.characters}
-              groundTruthBenchmark={phonemesResult.predict}
+              groundBenchmark={phonemesResult.predict}
             />
           </div>
         </div>

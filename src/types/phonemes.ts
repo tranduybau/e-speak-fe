@@ -1,13 +1,13 @@
-export interface PhonemeCharacter {
+export interface ModelPhonemeCharacter {
   char: string
   confidence: number
   end_offset: number
   start_offset: number
 }
 
-export interface CheckPhonemesResult {
+export interface ModelCheckPhonemes {
   confident: number
   ground_truth_benchmark: string
   predict: string
-  characters: PhonemeCharacter[]
+  characters: ModelPhonemeCharacter[]
 }

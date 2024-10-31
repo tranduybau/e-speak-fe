@@ -1,18 +1,47 @@
 import { randomId } from '@/lib/random-id'
-import { PhonemeCharacter } from '@/types/phonemes'
+import { ModelPhonemeCharacter } from '@/types/phonemes'
 
-export type Category = 'green' | 'yellow' | 'red'
-export type CharacterCategory = { char: string; category: Category; id: string }
+export type CharacterCategory = {
+  char: string
+  textColorClassName: string
+  id: string
+}
+
+const generateCharacterCategory = (
+  char: string,
+  isCurrentRed: boolean,
+  confidence: number,
+): CharacterCategory => {
+  if (isCurrentRed) {
+    return {
+      char,
+      textColorClassName: 'text-green-500',
+      id: randomId(),
+    }
+  }
+  if (confidence >= 0.8) {
+    return {
+      char,
+      textColorClassName: 'text-yellow-500',
+      id: randomId(),
+    }
+  }
+  return {
+    char,
+    textColorClassName: 'text-red-500',
+    id: randomId(),
+  }
+}
 
 export const getCharacterCategories = (
-  characters: PhonemeCharacter[],
-  groundTruthBenchmark: string,
+  characters: ModelPhonemeCharacter[],
+  groundBenchmark: string,
 ): CharacterCategory[] => {
   const characterCategories: CharacterCategory[] = []
 
   let isCurrentRed = false
   let currentCharIndex = 0
-  groundTruthBenchmark.split('').forEach((char) => {
+  groundBenchmark.split('').forEach((char) => {
     let truthChar: string = ''
     let confidence: number = 0
 
@@ -24,33 +53,15 @@ export const getCharacterCategories = (
 
     switch (char) {
       case ',':
-        return
+        break
       case '[':
         isCurrentRed = true
-        return
+        break
       case ']':
         isCurrentRed = false
-        return
+        break
       default:
-        if (isCurrentRed) {
-          characterCategories.push({
-            char,
-            category: 'red',
-            id: randomId(),
-          })
-        } else if (confidence >= 0.8) {
-          characterCategories.push({
-            char,
-            category: 'green',
-            id: randomId(),
-          })
-        } else {
-          characterCategories.push({
-            char,
-            category: 'yellow',
-            id: randomId(),
-          })
-        }
+        characterCategories.push(generateCharacterCategory(char, isCurrentRed, confidence))
     }
   })
 

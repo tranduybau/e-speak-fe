@@ -1,5 +1,7 @@
 import { useRef, useState } from 'react'
 
+import devLog from '@/lib/dev-log'
+
 export function useRecorder() {
   const [isRecording, setIsRecording] = useState(false)
   const mediaRecorderRef = useRef<MediaRecorder | null>(null)
@@ -33,7 +35,7 @@ export function useRecorder() {
       mediaRecorderRef.current.start()
       setIsRecording(true)
     } catch (error) {
-      console.error('Error accessing microphone', error)
+      devLog(`Error accessing microphone: ${error}`)
     }
   }
 

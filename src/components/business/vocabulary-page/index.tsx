@@ -22,12 +22,14 @@ function VocabularyDetailPage(props: VocabularyDetailPageProps) {
       </CardHeader>
       <CardContent>
         <div className="mb-4 flex items-center justify-start">
-          <ButtonPlayingWord dictionary={dictionary} audioUrl={data.audio_url} />
+          {!!data.audio_url && (
+            <ButtonPlayingWord dictionary={dictionary} audioUrl={data.audio_url} />
+          )}
           <span className="font-mono text-lg">{data.transcript_ipa}</span>
         </div>
         {!!data.transcript_ipa && (
           <div className="mb-2">
-            <CheckPhonemes groundTruth={data.transcript_ipa} />
+            <CheckPhonemes dictionary={dictionary} groundTruth={data.transcript_ipa} />
           </div>
         )}
       </CardContent>

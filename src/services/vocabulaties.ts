@@ -9,7 +9,7 @@ interface IVocabularyResponse {
 }
 
 const VocabulariesService = {
-  getWordDetails(word: string): Promise<IVocabularyResponse> {
+  async getWordDetails(word: string): Promise<IVocabularyResponse> {
     return fetch(`${ENDPOINTS.BASE_URL}${ENDPOINTS.DETAIL_WORD(word)}`)
       .then((res) => res.json())
       .then((data) => ({
