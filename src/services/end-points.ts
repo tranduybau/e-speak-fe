@@ -9,10 +9,6 @@ const ENDPOINTS = {
   SEARCH_WORD: '/vocabularies/search',
   DETAIL_WORD: (id: string) => `/vocabularies/detail/${id}`,
 
-  VOCABULARY: {
-    GET_DETAIL: (id: string) => `vocabularies/detail/${id}`,
-  },
-
   PHONEMES: {
     CHECK: '/check-phonemes',
   },

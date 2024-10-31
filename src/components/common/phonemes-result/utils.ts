@@ -15,20 +15,20 @@ const generateCharacterCategory = (
   if (isCurrentRed) {
     return {
       char,
-      textColorClassName: 'text-green-500',
+      textColorClassName: 'text-red-500',
       id: randomId(),
     }
   }
   if (confidence >= 0.8) {
     return {
       char,
-      textColorClassName: 'text-yellow-500',
+      textColorClassName: 'text-green-500',
       id: randomId(),
     }
   }
   return {
     char,
-    textColorClassName: 'text-red-500',
+    textColorClassName: 'text-yellow-500',
     id: randomId(),
   }
 }

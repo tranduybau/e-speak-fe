@@ -58,9 +58,9 @@ export default function CheckPhonemes({ groundTruth, dictionary }: CheckPhonemes
       </Button>
 
       {phonemesResult && (
-        <div className="border-t border-t-black pt-4">
+        <div className="mt-4 border-t border-t-gray-200 pt-4">
           <p className="mb-4 text-center text-xl font-bold">
-            Point: {phonemesResult.confident * 100}%
+            Point: {Math.round(phonemesResult.confident * 100)}%
           </p>
           <PhonemesResult
             characters={phonemesResult.characters}
