@@ -7,10 +7,18 @@ import { Loader2, Search } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 
 import VocabulariesServices from '@/services/csr/vocabularies'
+import { LocaleKeys } from '@/types/locales'
 
-export default function VocabularySearch() {
+import './vocabulary-input.scss'
+
+interface VocabularySearchProps {
+  dictionary: LocaleKeys
+}
+
+export default function VocabularySearch({ dictionary }: VocabularySearchProps) {
   // FIXME: Search term should from url params
   const [searchTerm, setSearchTerm] = useState('')
+  const [isFocus, setIsFocus] = useState(false)
 
   const {
     data: records,
@@ -22,11 +30,19 @@ export default function VocabularySearch() {
   })
 
   const debouncedSearchTerm = useDebounce(searchTerm, {
-    wait: 1000,
+    wait: 300,
   })
 
   const handleSetSearchTerm = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value)
+  }
+
+  const handleFocus = () => {
+    setIsFocus(true)
+  }
+
+  const handleBlur = () => {
+    setIsFocus(false)
   }
 
   // EXPLAIN: Run the request when the component is mounted
@@ -41,15 +57,17 @@ export default function VocabularySearch() {
   // }
 
   return (
-    <div className="mx-auto w-full max-w-md space-y-4 text-gray-400">
-      <div className="relative">
-        <Search className="absolute left-1 top-1/2 z-10 -translate-y-1/2 " />
+    <div className="relative mx-auto w-full max-w-md space-y-4 text-gray-400">
+      <div className="flex items-center rounded-md border border-border bg-sub">
+        <Search className="ml-2" onClick={() => run()} />
         <Input
           type="search"
           placeholder="Search vocabularies..."
-          className="relative border-border bg-sub pl-8 pr-4"
+          className="border-none bg-transparent p-4 focus:outline-none"
           value={searchTerm}
           onChange={handleSetSearchTerm}
+          onFocus={handleFocus}
+          onBlur={handleBlur}
         />
         {loading && <Loader2 className="absolute right-2.5 top-2.5 h-4 w-4 animate-spin" />}
       </div>
@@ -58,9 +76,9 @@ export default function VocabularySearch() {
         <p className="text-sm text-red-500">{error || 'Something went wrong'}</p>
       )}
 
-      {!!records?.data.length && (
+      {!!records?.data.length && searchTerm && (
         <ul className="absolute top-[30px] z-10 w-full cursor-pointer space-y-2 rounded-md border border-border bg-black py-[10px]">
-          {records?.data.map((vocab) => (
+          {records?.data.map((vocab: any) => (
             <li key={vocab.id} className="bg-muted rounded-m p-3 hover:bg-sub">
               <h3 className="flex items-center font-semibold">
                 <Search className="mr-2" /> {vocab.text}
@@ -68,13 +86,18 @@ export default function VocabularySearch() {
               {/* <p className="text-muted-foreground text-sm">{vocab.translation}</p> */}
             </li>
           ))}
-          <li className="px-4 hover:underline"> View all result</li>
+          <li className="px-4 hover:underline">{dictionary['View all result']}</li>
         </ul>
       )}
 
       {!loading && searchTerm && records?.data.length === 0 && (
         <div className="absolute top-[30px] w-full space-y-2 rounded-md bg-black p-[10px]">
-          <p className="text-muted-foreground text-sm ">No results found</p>
+          <p className="text-muted-foreground text-sm ">{dictionary['No results found']}</p>
+        </div>
+      )}
+      {!loading && !searchTerm && isFocus && (
+        <div className="absolute top-[30px] w-full space-y-2 rounded-md bg-black p-[10px]">
+          <p className="text-muted-foreground text-sm font-semibold">History search</p>
         </div>
       )}
     </div>

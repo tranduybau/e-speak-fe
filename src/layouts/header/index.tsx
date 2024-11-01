@@ -17,7 +17,7 @@ function Header({ dictionary }: DictionaryProps) {
         </Link>
 
         <div className="mx-4 w-full md:w-auto md:max-w-md md:flex-1">
-          <VocabularySearch />
+          <VocabularySearch dictionary={dictionary} />
         </div>
 
         <div className="flex items-center space-x-4">
