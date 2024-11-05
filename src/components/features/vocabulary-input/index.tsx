@@ -37,14 +37,6 @@ export default function VocabularySearch({ dictionary }: VocabularySearchProps) 
     setSearchTerm(event.target.value)
   }
 
-  const handleFocus = () => {
-    setIsFocus(true)
-  }
-
-  const handleBlur = () => {
-    setIsFocus(false)
-  }
-
   // EXPLAIN: Run the request when the component is mounted
   useEffect(() => {
     if (debouncedSearchTerm) {
@@ -66,8 +58,8 @@ export default function VocabularySearch({ dictionary }: VocabularySearchProps) 
           className="border-none bg-transparent p-4 focus:outline-none"
           value={searchTerm}
           onChange={handleSetSearchTerm}
-          onFocus={handleFocus}
-          onBlur={handleBlur}
+          onFocus={() => setIsFocus(true)}
+          onBlur={() => setIsFocus(false)}
         />
         {loading && <Loader2 className="absolute right-2.5 top-2.5 h-4 w-4 animate-spin" />}
       </div>
