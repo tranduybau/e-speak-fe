@@ -1,3 +1,4 @@
+
 {
   "Contact Us": "Contact Us",
   "About us": "About us",
@@ -11,5 +12,14 @@
   "Log In": "Log In",
   "Learn English": "Learn English",
   "View all result": "View all result",
-  "No results found": "No results found"
+  "No results found": "No results found",
+  "Your browser does not support the audio element." : "Your browser does not support the audio element.",
+  "Download Recording": "Download Recording",
+  "hello": "hello",
+  "Stop Recording": "Stop Recording",
+  "Start Recording": "Start Recording",
+  "Audio Recorder": "Audio Recorder",
+  "Captions": "Captions",
+  "Pause pronunciation": "Pause pronunciation",
+  "Play pronunciation": "Play pronunciation"
 }

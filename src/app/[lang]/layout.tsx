@@ -1,5 +1,3 @@
-import React from 'react'
-
 import { getDictionary } from '@/dictionaries/get-dictionary'
 import Footer from '@/layouts/footer'
 import Header from '@/layouts/header'

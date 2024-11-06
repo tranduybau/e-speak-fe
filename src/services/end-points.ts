@@ -7,7 +7,12 @@ const ENDPOINTS = {
 
   // Vocabularies
   SEARCH_WORD: '/vocabularies/search',
-  DETAIL_WORD: (id: string) => `/vocabularies/detail/${id}`,
+
+  DETAIL_WORD: (word: string) => `/vocabularies/detail/${word}`,
+
+  PHONEMES: {
+    CHECK: '/check-phonemes',
+  },
 }
 
 export default ENDPOINTS
