@@ -1,13 +1,20 @@
 import React from 'react'
 import { BookMarked, User } from 'lucide-react'
 import Link from 'next/link'
-
 import VocabularySearch from '@/components/features/vocabulary-input'
 import { Button } from '@/components/ui/button'
-
 import { DictionaryProps } from '@/types/common'
+import { Separator } from '@/components/ui/separator'
+import { SidebarTrigger } from '@/components/ui/sidebar'
+import { LocaleKeys } from '@/types/locales'
 
-function Header({ dictionary }: DictionaryProps) {
+interface Props {
+  dictionary: LocaleKeys
+}
+
+function Header(props: Props) {
+  const { dictionary } = props
+
   return (
     <header className="w-full border-b border-border bg-primary">
       <div className="container mx-auto flex flex-col items-center justify-between gap-4 px-4 py-4 text-white  md:flex-row">
@@ -28,6 +35,10 @@ function Header({ dictionary }: DictionaryProps) {
             <User className="mr-2 h-4 w-4" />
             {dictionary['Log In']}
           </Button>
+        </div>
+        <div className="flex items-center gap-2 px-4">
+        <SidebarTrigger className="-ml-1" />
+        <Separator orientation="vertical" className="mr-2 h-4" />
         </div>
       </div>
     </header>

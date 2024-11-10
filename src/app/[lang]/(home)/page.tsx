@@ -7,7 +7,7 @@ export default async function Home({ params }: DefaultPageProps) {
 
   console.log(`🆘 src/app/[lang]/(home)/page.tsx`); // eslint-disable-line
   console.log(dictionary); // eslint-disable-line
-  console.log('%c => dictionary ', 'background: #0095FF; color: #fff'); // eslint-disable-line
+  console.log("%c => dictionary ", "background: #0095FF; color: #fff"); // eslint-disable-line
   console.log(new Date()); // eslint-disable-line
 
   return <Homepage />
