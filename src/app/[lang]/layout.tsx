@@ -40,7 +40,7 @@ export default async function RootLayout({
           <SidebarProvider>
             <AppSidebar />
             <SidebarInset>
-              <Header />
+              <Header dictionary={dictionary} />
 
               <div className="flex flex-1 flex-col">{children}</div>
 

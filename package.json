@@ -18,6 +18,7 @@
     "axios": "^1.7.7",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
+    "dotenv": "^16.4.5",
     "embla-carousel": "^8.2.0",
     "embla-carousel-react": "^8.2.0",
     "lodash": "^4.17.21",
@@ -28,10 +29,8 @@
     "react-dom": "^18",
     "react-fast-compare": "^3.2.2",
     "react-hook-form": "^7.53.0",
-    "react-slick": "^0.30.2",
     "sass": "^1.77.8",
     "simple-zustand-devtools": "^1.1.0",
-    "slick-carousel": "^1.8.1",
     "tailwind-merge": "^2.5.2",
     "tailwindcss-animate": "^1.0.7",
     "yup": "^1.4.0",
@@ -74,7 +73,8 @@
     "build": "next build",
     "dev": "next dev",
     "lint": "next lint --fix",
-    "start": "next start"
+    "start": "next start",
+    "gen:types": "node generator/api.type.ts"
   },
   "version": "0.1.0"
 }

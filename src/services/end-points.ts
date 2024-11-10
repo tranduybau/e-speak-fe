@@ -7,6 +7,7 @@ const ENDPOINTS = {
 
   // Vocabularies
   SEARCH_WORD: '/vocabularies/search',
+
   DETAIL_WORD: (word: string) => `/vocabularies/detail/${word}`,
 
   PHONEMES: {

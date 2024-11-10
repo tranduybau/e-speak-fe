@@ -10,9 +10,22 @@ const config = {
   ],
   prefix: '',
   theme: {
-  	extend: {
-  		colors: {
-  			sidebar: {
+    extend: {
+      colors: {
+        // primary: '#0a092d',
+        sub: {
+          DEFAULT: '#2e3856',
+        },
+        border: {
+          DEFAULT: '#3d4458',
+        },
+        bg: {
+          DEFAULT: '#12141c',
+        },
+        primary: {
+          DEFAULT: '#0a092d',
+        },
+        sidebar: {
   				DEFAULT: 'hsl(var(--sidebar-background))',
   				foreground: 'hsl(var(--sidebar-foreground))',
   				primary: 'hsl(var(--sidebar-primary))',
@@ -22,8 +35,8 @@ const config = {
   				border: 'hsl(var(--sidebar-border))',
   				ring: 'hsl(var(--sidebar-ring))'
   			}
-  		}
-  	}
+      },
+    },
   },
   // eslint-disable-next-line global-require
   plugins: [require('tailwindcss-animate')],
