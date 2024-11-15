@@ -6,10 +6,9 @@ const ENDPOINTS = {
   REFRESH_TOKEN: '/users/refresh',
 
   // Vocabularies
-  SEARCH_WORD: '/vocabularies/search',
+  GET_VOCABS: '/vocabularies',
 
-  DETAIL_WORD: (word: string) => `/vocabularies/detail/${word}`,
-
+  // Phonemes
   PHONEMES: {
     CHECK: '/check-phonemes',
   },

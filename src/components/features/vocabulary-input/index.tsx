@@ -3,10 +3,11 @@
 import { useEffect, useState } from 'react'
 import { useDebounce, useRequest } from 'ahooks'
 import { Loader2, Search } from 'lucide-react'
+import Link from 'next/link'
 
 import { Input } from '@/components/ui/input'
 
-import VocabulariesServices from '@/services/csr/vocabularies'
+import VocabulariesService from '@/services/vocabulaties'
 import { LocaleKeys } from '@/types/locales'
 
 import './vocabulary-input.scss'
@@ -25,9 +26,15 @@ export default function VocabularySearch({ dictionary }: VocabularySearchProps) 
     error,
     loading,
     run,
-  } = useRequest(() => VocabulariesServices.searchWord(searchTerm), {
-    manual: true,
-  })
+  } = useRequest(
+    () =>
+      VocabulariesService.getVocabs({
+        text: searchTerm,
+      }),
+    {
+      manual: true,
+    },
+  )
 
   const debouncedSearchTerm = useDebounce(searchTerm, {
     wait: 300,
@@ -68,21 +75,25 @@ export default function VocabularySearch({ dictionary }: VocabularySearchProps) 
         <p className="text-sm text-red-500">{error || 'Something went wrong'}</p>
       )}
 
-      {!!records?.data.length && searchTerm && (
+      {!records?.isError && !!records?.data?.length && searchTerm && (
         <ul className="absolute top-[30px] z-10 w-full cursor-pointer space-y-2 rounded-md border border-border bg-black py-[10px]">
-          {records?.data.map((vocab: any) => (
-            <li key={vocab.id} className="bg-muted rounded-m p-3 hover:bg-sub">
+          {records?.data.map((vocab) => (
+            <Link
+              key={vocab.id}
+              href={`/vocabulary/${vocab.text}`}
+              className="bg-muted rounded-m p-3 hover:bg-sub"
+            >
               <h3 className="flex items-center font-semibold">
                 <Search className="mr-2" /> {vocab.text}
               </h3>
               {/* <p className="text-muted-foreground text-sm">{vocab.translation}</p> */}
-            </li>
+            </Link>
           ))}
           <li className="px-4 hover:underline">{dictionary['View all result']}</li>
         </ul>
       )}
 
-      {!loading && searchTerm && records?.data.length === 0 && (
+      {!loading && searchTerm && (records?.isError || records?.data?.length === 0) && (
         <div className="absolute top-[30px] w-full space-y-2 rounded-md bg-black p-[10px]">
           <p className="text-muted-foreground text-sm ">{dictionary['No results found']}</p>
         </div>

@@ -17,12 +17,15 @@ export default async function Vocabulary(props: VocabularyPageProps) {
 
   const dictionary = await getDictionary(params.lang)
 
-  const data = await VocabulariesService.getWordDetails(params.word)
+  const data = await VocabulariesService.getVocabs({
+    text: params.word,
+    is_strict: true,
+  })
 
-  if (data.isError) {
+  if (data.isError || data.data.length === 0) {
     devLog(data)
     notFound()
   }
 
-  return <VocabularyPage dictionary={dictionary} data={data.data!} />
+  return <VocabularyPage dictionary={dictionary} data={data.data[0]} />
 }

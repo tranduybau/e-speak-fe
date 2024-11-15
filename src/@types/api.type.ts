@@ -9,7 +9,26 @@
  * ---------------------------------------------------------------
  */
 
-export type GinH = Record<string, any>;
+export interface HandlersCharacter {
+  /** @example "dʒ" */
+  char?: string;
+  /** @example 0.9997 */
+  confidence?: number;
+  /** @example 0.24 */
+  end_offset?: number;
+  /** @example 0.16 */
+  start_offset?: number;
+}
+
+export interface HandlersResponsePhoneme {
+  characters?: HandlersCharacter[];
+  /** @example 0.92 */
+  confident?: number;
+  /** @example "ˈrʌ[ˌ]baʊt dʒi ɛm i ɛf θri naɪn" */
+  ground_truth_benchmark?: string;
+  /** @example "ˈrʌbaʊt dʒi ɛm i ɛf θri naɪn" */
+  predict?: string;
+}
 
 export interface ModelsImage {
   metadata?: Record<string, any>;
@@ -18,6 +37,24 @@ export interface ModelsImage {
   size_in_bytes?: number;
   thumbnail_url?: string;
   url?: string;
+}
+
+export interface ModelsInternalError {
+  details?: string;
+  message?: string;
+  status?: number;
+  type?: string;
+}
+
+export interface ModelsPaginationMeta {
+  current_page?: number;
+  page_count?: number;
+  total_count?: number;
+}
+
+export interface ModelsPaginationWrapper {
+  data?: object;
+  metadata?: ModelsPaginationMeta;
 }
 
 export interface ModelsUser {
@@ -37,9 +74,20 @@ export interface ModelsUserDictionaries {
   vocabulary_id?: string;
 }
 
+export interface ModelsValidationError {
+  details?: string;
+  message?: string;
+  status?: number;
+  type?: string;
+  validation_errors?: Record<string, string>;
+}
+
 export interface ModelsVocabulary {
   audio_url?: string;
+  image?: string;
+  level?: string;
   text?: string;
+  topic?: string;
   transcript_ipa?: string;
   translation?: string;
 }
@@ -273,7 +321,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request GET:/application/heartbeat
      */
     heartbeatList: (params: RequestParams = {}) =>
-      this.request<void, any>({
+      this.request<void, ModelsInternalError>({
         path: `/application/heartbeat`,
         method: "GET",
         ...params,
@@ -373,7 +421,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       },
       params: RequestParams = {},
     ) =>
-      this.request<void, GinH>({
+      this.request<HandlersResponsePhoneme, ModelsInternalError>({
         path: `/check-phonemes`,
         method: "POST",
         body: data,
@@ -387,12 +435,12 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      *
      * @tags errors
      * @name ErrorsDetail
-     * @summary return a error
+     * @summary return an error
      * @request GET:/errors/{id}
      * @secure
      */
     errorsDetail: (id: string, params: RequestParams = {}) =>
-      this.request<void, any>({
+      this.request<ModelsInternalError, ModelsValidationError>({
         path: `/errors/${id}`,
         method: "GET",
         secure: true,
@@ -425,7 +473,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       },
       params: RequestParams = {},
     ) =>
-      this.request<ModelsImage, GinH>({
+      this.request<ModelsImage, ModelsValidationError | ModelsInternalError>({
         path: `/images`,
         method: "POST",
         body: data,
@@ -456,7 +504,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       },
       params: RequestParams = {},
     ) =>
-      this.request<void, any>({
+      this.request<ModelsPaginationWrapper, ModelsInternalError>({
         path: `/lessons`,
         method: "GET",
         query: query,
@@ -502,7 +550,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       },
       params: RequestParams = {},
     ) =>
-      this.request<void, any>({
+      this.request<ModelsPaginationWrapper, ModelsInternalError>({
         path: `/users`,
         method: "GET",
         query: query,
@@ -520,7 +568,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @secure
      */
     usersDetail: (userId: string, params: RequestParams = {}) =>
-      this.request<void, any>({
+      this.request<ModelsUser, ModelsInternalError>({
         path: `/users/${userId}`,
         method: "GET",
         secure: true,
@@ -537,7 +585,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @secure
      */
     usersUpdate: (userId: string, user: ModelsUser, params: RequestParams = {}) =>
-      this.request<void, any>({
+      this.request<ModelsUser, ModelsValidationError | ModelsInternalError>({
         path: `/users/${userId}`,
         method: "PUT",
         body: user,
@@ -556,7 +604,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @secure
      */
     usersDelete: (userId: string, params: RequestParams = {}) =>
-      this.request<void, any>({
+      this.request<void, ModelsInternalError>({
         path: `/users/${userId}`,
         method: "DELETE",
         secure: true,
@@ -603,16 +651,50 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
   };
   vocabularies = {
     /**
+     * @description Retrieve vocabulary entries that match the provided word.
+     *
+     * @tags vocabularies
+     * @name VocabulariesList
+     * @summary Search vocabularies by word
+     * @request GET:/vocabularies
+     * @secure
+     */
+    vocabulariesList: (
+      query?: {
+        /** limit */
+        limit?: string;
+        /** page_number */
+        page_number?: string;
+        /** Ex: Personal Traits */
+        topic?: string;
+        /** Ex: A1 */
+        level?: string;
+        /** Ex: persistent */
+        text?: string;
+        /** is_strict = true return only one match */
+        is_strict?: boolean;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<ModelsPaginationWrapper, ModelsInternalError>({
+        path: `/vocabularies`,
+        method: "GET",
+        query: query,
+        secure: true,
+        ...params,
+      }),
+
+    /**
      * @description Retrieves the vocabulary entry that matches the specified word or phrase.
      *
      * @tags vocabularies
      * @name DetailDetail
      * @summary Fetch vocabulary details
-     * @request GET:/vocabularies/detail/{id}
+     * @request GET:/vocabularies/detail/{word}
      */
-    detailDetail: (id: string, params: RequestParams = {}) =>
+    detailDetail: (word: string, params: RequestParams = {}) =>
       this.request<ModelsVocabulary, any>({
-        path: `/vocabularies/detail/${id}`,
+        path: `/vocabularies/detail/${word}`,
         method: "GET",
         type: ContentType.Json,
         format: "json",
