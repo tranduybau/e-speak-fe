@@ -1,8 +1,4 @@
-import {
-  ModelsPaginationMeta,
-  ModelsPaginationWrapper,
-  ModelsVocabulary as SwaggerModelsVocabulary,
-} from '@/@types/api.type'
+import { ModelsPaginationMeta, ModelsPaginationWrapper, ModelsVocabulary } from '@/@types/api.type'
 
 import ENDPOINTS from './end-points'
 
@@ -21,20 +17,12 @@ interface IVocabulariesRequest {
   is_strict?: boolean
 }
 
-interface ModelsVocabulary extends SwaggerModelsVocabulary {
-  id: number
+interface IVocabulariesResponse {
+  isError: boolean
+  data: ModelsVocabulary[] | null
+  metadata: ModelsPaginationMeta | null
+  message: string
 }
-
-type IVocabulariesResponse =
-  | {
-      isError: false
-      data: ModelsVocabulary[]
-      metadata: ModelsPaginationMeta
-    }
-  | {
-      isError: true
-      message: string
-    }
 
 const VocabulariesService = {
   async getVocabs(req: IVocabulariesRequest): Promise<IVocabulariesResponse> {
@@ -54,6 +42,8 @@ const VocabulariesService = {
       .catch((error) => ({
         isError: true,
         message: error.message,
+        data: null,
+        metadata: null,
       }))
   },
 }
