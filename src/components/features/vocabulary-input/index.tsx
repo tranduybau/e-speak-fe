@@ -78,8 +78,13 @@ export default function VocabularySearch({ dictionary }: VocabularySearchProps) 
 
       <SearchResult
         data={records?.data || []}
+        searchTerm={searchTerm}
         isDisplay={isFocus}
-        onClose={() => setIsFocus(false)}
+        loading={loading}
+        onClose={() => {
+          setIsFocus(false)
+          // setSearchTerm('')
+        }}
       />
 
       {/* {!records?.isError && !!records?.data?.length && searchTerm && ( */}
@@ -100,16 +105,6 @@ export default function VocabularySearch({ dictionary }: VocabularySearchProps) 
       {/*   </ul> */}
       {/* )} */}
 
-      {!loading && searchTerm && (records?.isError || records?.data?.length === 0) && (
-        <div className="absolute top-[30px] w-full space-y-2 rounded-md bg-black p-[10px]">
-          <p className="text-muted-foreground text-sm ">{dictionary['No results found']}</p>
-        </div>
-      )}
-      {!loading && !searchTerm && isFocus && (
-        <div className="absolute top-[30px] w-full space-y-2 rounded-md bg-black p-[10px]">
-          <p className="text-muted-foreground text-sm font-semibold">History search</p>
-        </div>
-      )}
     </div>
   )
 }
