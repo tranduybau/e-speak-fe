@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation'
 import VocabularyPage from '@/components/business/vocabulary-page'
 import { getDictionary } from '@/dictionaries/get-dictionary'
 import devLog from '@/lib/dev-log'
-import VocabulariesService from '@/services/vocabulaties'
+import VocabulariesService from '@/services/vocabularies'
 import { DefaultPageProps } from '@/types/common'
 
 interface VocabularyPageProps extends DefaultPageProps {

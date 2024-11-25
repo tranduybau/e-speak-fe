@@ -6,7 +6,7 @@ import { Loader2, Search } from 'lucide-react'
 
 import { Input } from '@/components/ui/input'
 
-import VocabulariesService from '@/services/vocabulaties'
+import VocabulariesService from '@/services/vocabularies'
 
 import SearchResult from './search-result'
 
