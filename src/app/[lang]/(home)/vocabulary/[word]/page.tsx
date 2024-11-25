@@ -22,10 +22,10 @@ export default async function Vocabulary(props: VocabularyPageProps) {
     is_strict: true,
   })
 
-  if (data.isError || data?.data?.length === 0) {
+  if (data.isError || !data.data || data.data.length === 0) {
     devLog(data)
     notFound()
   }
 
-  return <VocabularyPage dictionary={dictionary} data={data.data![0]} />
+  return <VocabularyPage dictionary={dictionary} data={data.data[0]} />
 }

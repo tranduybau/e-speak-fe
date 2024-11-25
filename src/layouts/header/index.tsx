@@ -25,7 +25,7 @@ function Header(props: Props) {
         </Link>
 
         <div className="mx-4 w-full md:w-auto md:max-w-md md:flex-1">
-          <VocabularySearch dictionary={dictionary} />
+          <VocabularySearch />
         </div>
 
         <div className="flex items-center space-x-4">

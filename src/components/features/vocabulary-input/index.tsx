@@ -7,17 +7,12 @@ import { Loader2, Search } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 
 import VocabulariesService from '@/services/vocabulaties'
-import { LocaleKeys } from '@/types/locales'
 
 import SearchResult from './search-result'
 
 import './vocabulary-input.scss'
 
-interface VocabularySearchProps {
-  dictionary: LocaleKeys
-}
-
-export default function VocabularySearch({ dictionary }: VocabularySearchProps) {
+export default function VocabularySearch() {
   // FIXME: Search term should from url params
   const [searchTerm, setSearchTerm] = useState('')
   const [isFocus, setIsFocus] = useState(false)
@@ -104,7 +99,6 @@ export default function VocabularySearch({ dictionary }: VocabularySearchProps) 
       {/*     <li className="px-4 hover:underline">{dictionary['View all result']}</li> */}
       {/*   </ul> */}
       {/* )} */}
-
     </div>
   )
 }
