@@ -10,7 +10,8 @@
     "airbnb/hooks",
     "plugin:react/recommended",
     "plugin:prettier/recommended",
-    "plugin:@next/next/recommended"
+    "plugin:@next/next/recommended",
+    "plugin:@tanstack/query/recommended"
   ],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
