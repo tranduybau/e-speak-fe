@@ -24,6 +24,7 @@
   },
   "plugins": ["react", "@typescript-eslint", "prettier", "simple-import-sort"],
   "rules": {
+    "@typescript-eslint/no-use-before-define": "off",
     "import/extensions": 0,
     "import/no-unresolved": 0,
     "prettier/prettier": [
@@ -90,7 +91,7 @@
         "react/prop-types": 0,
         "no-use-before-define": 0,
         "jsx-a11y/heading-has-content": 0,
-        "@typescript-eslint/no-use-before-define": 0,
+        "@typescript-eslint/no-use-before-define": "off",
         "@typescript-eslint/no-shadow": 0,
         "@typescript-eslint/no-unused-vars": 0,
         "react/jsx-no-constructed-context-values": 0

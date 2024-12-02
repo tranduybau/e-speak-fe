@@ -1,26 +1,27 @@
-"use client";
+'use client'
 
-import * as React from "react";
+import * as React from 'react'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useRouter } from 'next/navigation'
 
-import { cn } from "@/lib/utils";
-import { Icons } from "@/components/ui/icons";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { useLoginMutation } from "@/queries/useAuth";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { LoginBody, LoginBodyType } from "@/schemaValidations/auth.schema";
-import { useToast } from "@/hooks/use-toast";
-import { useRouter } from "next/navigation";
+import { Button } from '@/components/ui/button'
+import { Icons } from '@/components/ui/icons'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+
+import { useToast } from '@/hooks/use-toast'
+import { cn } from '@/lib/utils'
+import { useLoginMutation } from '@/queries/useAuth'
+import { LoginBody, LoginBodyType } from '@/schemaValidations/auth.schema'
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export function UserAuthFormLogin({ className, ...props }: UserAuthFormProps) {
-  const [isLoading, setIsLoading] = React.useState<boolean>(false);
-  const loginMutation = useLoginMutation();
-  const { toast } = useToast();
-  const router = useRouter();
+  const [isLoading] = React.useState<boolean>(false)
+  const loginMutation = useLoginMutation()
+  const { toast } = useToast()
+  const router = useRouter()
 
   const {
     register,
@@ -29,27 +30,27 @@ export function UserAuthFormLogin({ className, ...props }: UserAuthFormProps) {
   } = useForm<LoginBodyType>({
     resolver: zodResolver(LoginBody),
     defaultValues: {
-      email: "",
-      password: "",
+      email: '',
+      password: '',
     },
-  });
+  })
 
   async function onSubmit(data: LoginBodyType) {
     try {
-      await loginMutation.mutateAsync(data);
-      router.push("/");
-      router.refresh();
+      await loginMutation.mutateAsync(data)
+      router.push('/')
+      router.refresh()
     } catch (error: any) {
       toast({
         description: error.payload.error,
-        variant: "destructive",
-        className: "bg-red-600 text-white",
-      });
+        variant: 'destructive',
+        className: 'bg-red-600 text-white',
+      })
     }
   }
 
   return (
-    <div className={cn("grid gap-6", className)} {...props}>
+    <div className={cn('grid gap-6', className)} {...props}>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="grid gap-2">
           <div className="grid gap-1">
@@ -64,7 +65,7 @@ export function UserAuthFormLogin({ className, ...props }: UserAuthFormProps) {
               autoComplete="email"
               autoCorrect="off"
               disabled={isLoading}
-              {...register("email")}
+              {...register('email')}
             />
             {errors.email?.message && (
               <p className="text-destructive text-sm font-medium text-[red]">
@@ -84,7 +85,7 @@ export function UserAuthFormLogin({ className, ...props }: UserAuthFormProps) {
               autoComplete="password"
               autoCorrect="off"
               disabled={isLoading}
-              {...register("password")}
+              {...register('password')}
             />
             {errors.password?.message && (
               <p className="text-destructive text-sm font-medium text-[red]">
@@ -93,9 +94,7 @@ export function UserAuthFormLogin({ className, ...props }: UserAuthFormProps) {
             )}
           </div>
           <Button disabled={isLoading} className="text-white">
-            {isLoading && (
-              <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
-            )}
+            {isLoading && <Icons.Spinner className="mr-2 h-4 w-4 animate-spin" />}
             Sign In with Email
           </Button>
         </div>
@@ -119,5 +118,5 @@ export function UserAuthFormLogin({ className, ...props }: UserAuthFormProps) {
         GitHub
       </Button> */}
     </div>
-  );
+  )
 }
