@@ -1,21 +1,11 @@
-import { ModelsPaginationMeta, ModelsPaginationWrapper, ModelsVocabulary } from '@/@types/api.type'
+import {
+  IVocabulariesRequest,
+  ModelsPaginationMeta,
+  ModelsPaginationWrapper,
+  ModelsVocabulary,
+} from '@/@types/api.type'
 
 import ENDPOINTS from './end-points'
-
-interface IVocabulariesRequest {
-  /** limit */
-  limit?: string
-  /** page_number */
-  page_number?: string
-  /** Ex: Personal Traits */
-  topic?: string
-  /** Ex: A1 */
-  level?: string
-  /** Ex: persistent */
-  text?: string
-  /** is_strict = true return only one match */
-  is_strict?: boolean
-}
 
 interface IVocabulariesResponse {
   isError: boolean
@@ -26,7 +16,7 @@ interface IVocabulariesResponse {
 
 const VocabulariesService = {
   async getVocabs(req: IVocabulariesRequest): Promise<IVocabulariesResponse> {
-    const url = new URL(`${ENDPOINTS.BASE_URL}${ENDPOINTS.GET_VOCABS}`)
+    const url = new URL(`${ENDPOINTS.BASE_URL}${ENDPOINTS.GET_VOCABULARIES}`)
     Object.entries(req).forEach(([key, value]) => {
       url.searchParams.append(key, value)
     })

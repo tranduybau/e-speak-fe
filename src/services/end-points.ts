@@ -6,7 +6,7 @@ const ENDPOINTS = {
   REFRESH_TOKEN: '/users/refresh',
 
   // Vocabularies
-  GET_VOCABS: '/vocabularies',
+  GET_VOCABULARIES: '/vocabularies',
 
   // Phonemes
   PHONEMES: {

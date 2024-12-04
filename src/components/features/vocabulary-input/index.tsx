@@ -5,6 +5,7 @@ import { useDebounce, useRequest } from 'ahooks'
 import { Loader2, Search } from 'lucide-react'
 
 import { Input } from '@/components/ui/input'
+import { Spinner } from '@/components/ui/spinner'
 
 import VocabulariesService from '@/services/vocabularies'
 
@@ -16,6 +17,7 @@ export default function VocabularySearch() {
   // FIXME: Search term should from url params
   const [searchTerm, setSearchTerm] = useState('')
   const [isFocus, setIsFocus] = useState(false)
+  const [isDebouncing, setIsDebouncing] = useState(false)
 
   const {
     data: records,
@@ -38,11 +40,13 @@ export default function VocabularySearch() {
 
   const handleSetSearchTerm = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value)
+    setIsDebouncing(true)
   }
 
   // EXPLAIN: Run the request when the component is mounted
   useEffect(() => {
     if (debouncedSearchTerm) {
+      setIsDebouncing(false)
       run()
     }
   }, [debouncedSearchTerm]) // eslint-disable-line react-hooks/exhaustive-deps
@@ -71,16 +75,26 @@ export default function VocabularySearch() {
         <p className="text-sm text-red-500">{error || 'Something went wrong'}</p>
       )}
 
-      <SearchResult
-        data={records?.data || []}
-        searchTerm={searchTerm}
-        isDisplay={isFocus}
-        loading={loading}
-        onClose={() => {
-          setIsFocus(false)
-          // setSearchTerm('')
-        }}
-      />
+      {isFocus &&
+        (isDebouncing && searchTerm ? (
+          <div className="absolute top-[30px] w-full space-y-2 rounded-md bg-black p-[10px]">
+            <p className="text-muted-foreground h-[40px] text-sm">
+              <Spinner className="text-gray-500">
+                <span className="text-gray-500" />
+              </Spinner>
+            </p>
+          </div>
+        ) : (
+          <SearchResult
+            data={records?.data || []}
+            searchTerm={searchTerm}
+            isDisplay={isFocus}
+            loading={loading || isDebouncing}
+            onClose={() => {
+              setIsFocus(false)
+            }}
+          />
+        ))}
 
       {/* {!records?.isError && !!records?.data?.length && searchTerm && ( */}
       {/*   <ul className="absolute top-[30px] z-10 w-full cursor-pointer space-y-2 rounded-md border border-border bg-black py-[10px]"> */}
