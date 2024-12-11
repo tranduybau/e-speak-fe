@@ -17,7 +17,7 @@ export default async function Vocabulary(props: VocabularyPageProps) {
 
   const dictionary = await getDictionary(params.lang)
 
-  const data = await VocabulariesService.getVocabs({
+  const data = await VocabulariesService.getVocabularies({
     text: params.word,
     is_strict: true,
   })

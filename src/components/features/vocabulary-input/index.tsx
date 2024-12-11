@@ -26,7 +26,7 @@ export default function VocabularySearch() {
     run,
   } = useRequest(
     () =>
-      VocabulariesService.getVocabs({
+      VocabulariesService.getVocabularies({
         text: searchTerm,
       }),
     {

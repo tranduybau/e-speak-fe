@@ -15,7 +15,7 @@ interface IVocabulariesResponse {
 }
 
 const VocabulariesService = {
-  async getVocabs(req: IVocabulariesRequest): Promise<IVocabulariesResponse> {
+  async getVocabularies(req: IVocabulariesRequest): Promise<IVocabulariesResponse> {
     const url = new URL(`${ENDPOINTS.BASE_URL}${ENDPOINTS.GET_VOCABULARIES}`)
     Object.entries(req).forEach(([key, value]) => {
       url.searchParams.append(key, value)
