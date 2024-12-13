@@ -1,11 +1,12 @@
 import React from 'react'
 import { BookMarked, User } from 'lucide-react'
 import Link from 'next/link'
+
 import VocabularySearch from '@/components/features/vocabulary-input'
 import { Button } from '@/components/ui/button'
-import { DictionaryProps } from '@/types/common'
 import { Separator } from '@/components/ui/separator'
 import { SidebarTrigger } from '@/components/ui/sidebar'
+
 import { LocaleKeys } from '@/types/locales'
 
 interface Props {
@@ -24,7 +25,7 @@ function Header(props: Props) {
         </Link>
 
         <div className="mx-4 w-full md:w-auto md:max-w-md md:flex-1">
-          <VocabularySearch dictionary={dictionary} />
+          <VocabularySearch />
         </div>
 
         <div className="flex items-center space-x-4">
@@ -37,8 +38,8 @@ function Header(props: Props) {
           </Button>
         </div>
         <div className="flex items-center gap-2 px-4">
-        <SidebarTrigger className="-ml-1" />
-        <Separator orientation="vertical" className="mr-2 h-4" />
+          <SidebarTrigger className="-ml-1" />
+          <Separator orientation="vertical" className="mr-2 h-4" />
         </div>
       </div>
     </header>

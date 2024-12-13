@@ -5,29 +5,34 @@ import { useDebounce, useRequest } from 'ahooks'
 import { Loader2, Search } from 'lucide-react'
 
 import { Input } from '@/components/ui/input'
+import { Spinner } from '@/components/ui/spinner'
 
-import VocabulariesServices from '@/services/csr/vocabularies'
-import { LocaleKeys } from '@/types/locales'
+import VocabulariesService from '@/services/vocabularies'
+
+import SearchResult from './search-result'
 
 import './vocabulary-input.scss'
 
-interface VocabularySearchProps {
-  dictionary: LocaleKeys
-}
-
-export default function VocabularySearch({ dictionary }: VocabularySearchProps) {
+export default function VocabularySearch() {
   // FIXME: Search term should from url params
   const [searchTerm, setSearchTerm] = useState('')
   const [isFocus, setIsFocus] = useState(false)
+  const [isDebouncing, setIsDebouncing] = useState(false)
 
   const {
     data: records,
     error,
     loading,
     run,
-  } = useRequest(() => VocabulariesServices.searchWord(searchTerm), {
-    manual: true,
-  })
+  } = useRequest(
+    () =>
+      VocabulariesService.getVocabularies({
+        text: searchTerm,
+      }),
+    {
+      manual: true,
+    },
+  )
 
   const debouncedSearchTerm = useDebounce(searchTerm, {
     wait: 300,
@@ -35,11 +40,13 @@ export default function VocabularySearch({ dictionary }: VocabularySearchProps) 
 
   const handleSetSearchTerm = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value)
+    setIsDebouncing(true)
   }
 
   // EXPLAIN: Run the request when the component is mounted
   useEffect(() => {
     if (debouncedSearchTerm) {
+      setIsDebouncing(false)
       run()
     }
   }, [debouncedSearchTerm]) // eslint-disable-line react-hooks/exhaustive-deps
@@ -68,30 +75,44 @@ export default function VocabularySearch({ dictionary }: VocabularySearchProps) 
         <p className="text-sm text-red-500">{error || 'Something went wrong'}</p>
       )}
 
-      {!!records?.data.length && searchTerm && (
-        <ul className="absolute top-[30px] z-10 w-full cursor-pointer space-y-2 rounded-md border border-border bg-black py-[10px]">
-          {records?.data.map((vocab: any) => (
-            <li key={vocab.id} className="bg-muted rounded-m p-3 hover:bg-sub">
-              <h3 className="flex items-center font-semibold">
-                <Search className="mr-2" /> {vocab.text}
-              </h3>
-              {/* <p className="text-muted-foreground text-sm">{vocab.translation}</p> */}
-            </li>
-          ))}
-          <li className="px-4 hover:underline">{dictionary['View all result']}</li>
-        </ul>
-      )}
+      {isFocus &&
+        (isDebouncing && searchTerm ? (
+          <div className="absolute top-[30px] w-full space-y-2 rounded-md bg-black p-[10px]">
+            <p className="text-muted-foreground h-[40px] text-sm">
+              <Spinner className="text-gray-500">
+                <span className="text-gray-500" />
+              </Spinner>
+            </p>
+          </div>
+        ) : (
+          <SearchResult
+            data={records?.data || []}
+            searchTerm={searchTerm}
+            isDisplay={isFocus}
+            loading={loading || isDebouncing}
+            onClose={() => {
+              setIsFocus(false)
+            }}
+          />
+        ))}
 
-      {!loading && searchTerm && records?.data.length === 0 && (
-        <div className="absolute top-[30px] w-full space-y-2 rounded-md bg-black p-[10px]">
-          <p className="text-muted-foreground text-sm ">{dictionary['No results found']}</p>
-        </div>
-      )}
-      {!loading && !searchTerm && isFocus && (
-        <div className="absolute top-[30px] w-full space-y-2 rounded-md bg-black p-[10px]">
-          <p className="text-muted-foreground text-sm font-semibold">History search</p>
-        </div>
-      )}
+      {/* {!records?.isError && !!records?.data?.length && searchTerm && ( */}
+      {/*   <ul className="absolute top-[30px] z-10 w-full cursor-pointer space-y-2 rounded-md border border-border bg-black py-[10px]"> */}
+      {/*     {records?.data.map((vocab) => ( */}
+      {/*       <li key={vocab.id} className="bg-muted rounded-m"> */}
+      {/*         <Link */}
+      {/*           href={`/${params.lang}/vocabulary/${vocab.text}`} */}
+      {/*           className="block p-3 hover:bg-sub" */}
+      {/*         > */}
+      {/*           <h3 className="flex items-center font-semibold"> */}
+      {/*             <Search className="mr-2" /> {vocab.text} */}
+      {/*           </h3> */}
+      {/*         </Link> */}
+      {/*       </li> */}
+      {/*     ))} */}
+      {/*     <li className="px-4 hover:underline">{dictionary['View all result']}</li> */}
+      {/*   </ul> */}
+      {/* )} */}
     </div>
   )
 }

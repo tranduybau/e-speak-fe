@@ -9,7 +9,26 @@
  * ---------------------------------------------------------------
  */
 
-export type GinH = Record<string, any>;
+export interface HandlersCharacter {
+  /** @example "dʒ" */
+  char?: string;
+  /** @example 0.9997 */
+  confidence?: number;
+  /** @example 0.24 */
+  end_offset?: number;
+  /** @example 0.16 */
+  start_offset?: number;
+}
+
+export interface HandlersResponsePhoneme {
+  characters?: HandlersCharacter[];
+  /** @example 0.92 */
+  confident?: number;
+  /** @example "ˈrʌ[ˌ]baʊt dʒi ɛm i ɛf θri naɪn" */
+  ground_truth_benchmark?: string;
+  /** @example "ˈrʌbaʊt dʒi ɛm i ɛf θri naɪn" */
+  predict?: string;
+}
 
 export interface ModelsImage {
   metadata?: Record<string, any>;
@@ -20,16 +39,90 @@ export interface ModelsImage {
   url?: string;
 }
 
+export interface ModelsInternalError {
+  details?: string;
+  message?: string;
+  status?: number;
+  type?: string;
+}
+
+export interface ModelsLesson {
+  created_at?: string;
+  ipa?: string;
+  practice_items?: ModelsPracticeItem[];
+  type?: ModelsLessonType;
+}
+
+export enum ModelsLessonType {
+  WordType = "word",
+  PhraseType = "phrase",
+  SentenceType = "sentence",
+  ConversationType = "conversation",
+}
+
+export interface ModelsPaginationMeta {
+  current_page?: number;
+  page_count?: number;
+  total_count?: number;
+}
+
+export interface ModelsPaginationWrapper {
+  data?: object;
+  metadata?: ModelsPaginationMeta;
+}
+
+export interface ModelsPracticeItem {
+  audio_url?: string;
+  content?: string;
+  transcript_ipa?: string;
+  translation?: string;
+}
+
+export interface ModelsSentence {
+  content?: string;
+  end?: number;
+  start?: number;
+}
+
+export interface ModelsStory {
+  audio_url?: string;
+  author?: string;
+  description?: string;
+  duration?: number;
+  image_url?: string;
+  /** list sentences include vtt */
+  sentences?: ModelsSentence[];
+  source?: string;
+  title?: string;
+  transcription?: string;
+  translation?: string;
+  views?: number;
+}
+
+export enum ModelsStoryLevel {
+  Beginner = "beginner",
+  Intermediate = "intermediate",
+  Advanced = "advanced",
+  Proficient = "proficient",
+}
+
+export enum ModelsStoryStatus {
+  InProgress = "in_progress",
+  Completed = "completed",
+}
+
 export interface ModelsUser {
   avatar?: string;
   email: string;
-  google_id?: string;
-  is_pay?: boolean;
-  username: string;
+  /** relations */
+  lessons?: ModelsLesson[];
+  name?: string;
+  stories?: ModelsStory[];
 }
 
 export interface ModelsUserCredentials {
   email: string;
+  /** @minLength 6 */
   password: string;
 }
 
@@ -37,9 +130,62 @@ export interface ModelsUserDictionaries {
   vocabulary_id?: string;
 }
 
+export interface IVocabulariesRequest {
+  /** limit */
+  limit?: string;
+  /** page_number */
+  page_number?: string;
+  /** Ex: Personal Traits */
+  topic?: string;
+  /** Ex: A1 */
+  level?: string;
+  /** Ex: persistent */
+  text?: string;
+  /** is_strict = true return only one match */
+  is_strict?: boolean;
+}
+
+export interface ModelsUserLesson {
+  lesson?: ModelsLesson;
+  lesson_id?: string;
+  score?: number;
+  user?: ModelsUser;
+  user_id?: string;
+}
+
+export interface ModelsUserStory {
+  level: ModelsStoryLevel;
+  score?: number;
+  /** list sentences include vtt */
+  sentences?: ModelsUserStorySentence[];
+  status?: ModelsStoryStatus;
+  story?: ModelsStory;
+  story_id?: string;
+  user?: ModelsUser;
+  user_id?: string;
+}
+
+export interface ModelsUserStorySentence {
+  content?: string;
+  end?: number;
+  start?: number;
+  user_answers?: string[];
+}
+
+export interface ModelsValidationError {
+  details?: string;
+  message?: string;
+  status?: number;
+  type?: string;
+  validation_errors?: Record<string, string>;
+}
+
 export interface ModelsVocabulary {
   audio_url?: string;
+  image?: string;
+  level?: string;
   text?: string;
+  topic?: string;
   transcript_ipa?: string;
   translation?: string;
 }
@@ -231,18 +377,18 @@ export class HttpClient<SecurityDataType = unknown> {
       const data = !responseFormat
         ? r
         : await response[responseFormat]()
-            .then((data) => {
-              if (r.ok) {
-                r.data = data;
-              } else {
-                r.error = data;
-              }
-              return r;
-            })
-            .catch((e) => {
-              r.error = e;
-              return r;
-            });
+          .then((data) => {
+            if (r.ok) {
+              r.data = data;
+            } else {
+              r.error = data;
+            }
+            return r;
+          })
+          .catch((e) => {
+            r.error = e;
+            return r;
+          });
 
       if (cancelToken) {
         this.abortControllers.delete(cancelToken);
@@ -273,7 +419,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request GET:/application/heartbeat
      */
     heartbeatList: (params: RequestParams = {}) =>
-      this.request<void, any>({
+      this.request<void, ModelsInternalError>({
         path: `/application/heartbeat`,
         method: "GET",
         ...params,
@@ -290,7 +436,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @secure
      */
     loginCreate: (user: ModelsUserCredentials, params: RequestParams = {}) =>
-      this.request<void, any>({
+      this.request<void, ModelsInternalError | ModelsValidationError>({
         path: `/auth/login`,
         method: "POST",
         body: user,
@@ -309,7 +455,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @secure
      */
     logoutCreate: (params: RequestParams = {}) =>
-      this.request<void, any>({
+      this.request<void, ModelsInternalError>({
         path: `/auth/logout`,
         method: "POST",
         secure: true,
@@ -327,7 +473,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @secure
      */
     refreshTokenCreate: (params: RequestParams = {}) =>
-      this.request<void, any>({
+      this.request<void, ModelsInternalError>({
         path: `/auth/refresh_token`,
         method: "POST",
         secure: true,
@@ -343,8 +489,8 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @summary create a user
      * @request POST:/auth/register
      */
-    registerCreate: (user: ModelsUser, params: RequestParams = {}) =>
-      this.request<void, any>({
+    registerCreate: (user: ModelsUserCredentials, params: RequestParams = {}) =>
+      this.request<void, ModelsInternalError | ModelsValidationError>({
         path: `/auth/register`,
         method: "POST",
         body: user,
@@ -373,7 +519,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       },
       params: RequestParams = {},
     ) =>
-      this.request<void, GinH>({
+      this.request<HandlersResponsePhoneme, ModelsInternalError>({
         path: `/check-phonemes`,
         method: "POST",
         body: data,
@@ -387,12 +533,12 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      *
      * @tags errors
      * @name ErrorsDetail
-     * @summary return a error
+     * @summary return an error
      * @request GET:/errors/{id}
      * @secure
      */
     errorsDetail: (id: string, params: RequestParams = {}) =>
-      this.request<void, any>({
+      this.request<ModelsInternalError, ModelsValidationError>({
         path: `/errors/${id}`,
         method: "GET",
         secure: true,
@@ -425,7 +571,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       },
       params: RequestParams = {},
     ) =>
-      this.request<ModelsImage, GinH>({
+      this.request<ModelsImage, ModelsValidationError | ModelsInternalError>({
         path: `/images`,
         method: "POST",
         body: data,
@@ -456,7 +602,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       },
       params: RequestParams = {},
     ) =>
-      this.request<void, any>({
+      this.request<ModelsPaginationWrapper, ModelsInternalError>({
         path: `/lessons`,
         method: "GET",
         query: query,
@@ -502,7 +648,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       },
       params: RequestParams = {},
     ) =>
-      this.request<void, any>({
+      this.request<ModelsPaginationWrapper, ModelsInternalError>({
         path: `/users`,
         method: "GET",
         query: query,
@@ -520,7 +666,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @secure
      */
     usersDetail: (userId: string, params: RequestParams = {}) =>
-      this.request<void, any>({
+      this.request<ModelsUser, ModelsInternalError>({
         path: `/users/${userId}`,
         method: "GET",
         secure: true,
@@ -537,7 +683,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @secure
      */
     usersUpdate: (userId: string, user: ModelsUser, params: RequestParams = {}) =>
-      this.request<void, any>({
+      this.request<ModelsUser, ModelsValidationError | ModelsInternalError>({
         path: `/users/${userId}`,
         method: "PUT",
         body: user,
@@ -556,7 +702,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @secure
      */
     usersDelete: (userId: string, params: RequestParams = {}) =>
-      this.request<void, any>({
+      this.request<void, ModelsInternalError>({
         path: `/users/${userId}`,
         method: "DELETE",
         secure: true,
@@ -600,47 +746,69 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         type: ContentType.Json,
         ...params,
       }),
-  };
-  vocabularies = {
+
     /**
-     * @description Retrieves the vocabulary entry that matches the specified word or phrase.
+     * No description
      *
-     * @tags vocabularies
-     * @name DetailDetail
-     * @summary Fetch vocabulary details
-     * @request GET:/vocabularies/detail/{id}
+     * @tags users
+     * @name LessonsCreate
+     * @summary create or update score lesson
+     * @request POST:/users/{user_id}/lessons
+     * @secure
      */
-    detailDetail: (id: string, params: RequestParams = {}) =>
-      this.request<ModelsVocabulary, any>({
-        path: `/vocabularies/detail/${id}`,
-        method: "GET",
+    lessonsCreate: (userId: string, story: ModelsUserLesson, params: RequestParams = {}) =>
+      this.request<ModelsUserLesson, ModelsValidationError | ModelsInternalError>({
+        path: `/users/${userId}/lessons`,
+        method: "POST",
+        body: story,
+        secure: true,
         type: ContentType.Json,
-        format: "json",
         ...params,
       }),
 
     /**
-     * @description Retrieve vocabulary entries that match the provided word.
+     * No description
      *
-     * @tags vocabularies
-     * @name SearchList
-     * @summary Search vocabularies by word
-     * @request GET:/vocabularies/search
+     * @tags users
+     * @name StoriesCreate
+     * @summary doing a story
+     * @request POST:/users/{user_id}/stories
+     * @secure
      */
-    searchList: (
-      query: {
-        /** The vocabulary word to search for */
-        word: string;
-      },
-      params: RequestParams = {},
-    ) =>
-      this.request<ModelsVocabulary[], any>({
-        path: `/vocabularies/search`,
-        method: "GET",
-        query: query,
+    storiesCreate: (userId: string, story: ModelsUserStory, params: RequestParams = {}) =>
+      this.request<ModelsUserStory, ModelsValidationError | ModelsInternalError>({
+        path: `/users/${userId}/stories`,
+        method: "POST",
+        body: story,
+        secure: true,
         type: ContentType.Json,
-        format: "json",
         ...params,
       }),
   };
+
+
+
+  vocabularies = {
+    /**
+     * @description Retrieve vocabulary entries that match the provided word.
+     *
+     * @tags vocabularies
+     * @name VocabulariesList
+     * @summary Search vocabularies by word
+     * @request GET:/vocabularies
+     * @secure
+     */
+    vocabulariesList: (
+      query?: IVocabulariesRequest,
+      params: RequestParams = {},
+    ) =>
+      this.request<ModelsPaginationWrapper, ModelsInternalError>({
+        path: `/vocabularies`,
+        method: "GET",
+        query: query,
+        secure: true,
+        ...params,
+      }),
+  };
+
 }
