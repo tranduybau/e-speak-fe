@@ -32,3 +32,7 @@ export const getCodePoints = (str: string) => {
     .map((hex) => `\\u${hex}`)
     .join()
 }
+
+export const normalizePath = (path: string) => {
+  return path.startsWith('/') ? path.slice(1) : path
+}
